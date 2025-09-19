@@ -1,12 +1,6 @@
-one
-two
-three
-four
-five
-six
-seven
-eight
-nine
-ten
-eleven
-twelve
+One, two + :)
+two::One,,,three
+three/two
+Four
+one, five=three
+

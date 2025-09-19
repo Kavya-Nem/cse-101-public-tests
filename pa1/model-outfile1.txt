@@ -1,12 +1,8 @@
-eight
-eleven
+(3, 0, 5, 4, 2, 1)
+
+Four
+One
 five
-four
-nine
 one
-seven
-six
-ten
 three
-twelve
 two
