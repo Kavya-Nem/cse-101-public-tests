@@ -9,7 +9,7 @@
 #include "../../pa2/Graph.h"
 #include "../../pa2/List.h"
 
-#define FIRST_TEST DG_getSize
+#define FIRST_TEST DG_getNumArcs
 #define MAXSCORE 40
 #define CHARITY 10
 
@@ -24,13 +24,13 @@ static uint8_t disable_exit_handler;
 jmp_buf test_crash;
 
 enum Test_e {
-  DG_getSize = 0, // directed graph tests
+  DG_getNumArcs = 0, // directed graph tests
   DG_getSource,
   DG_getParent,
   DG_getDist,
   DG_getPath,
 
-  UG_getSize, // undirected graph tests
+  UG_getNumEdges, // undirected graph tests
   UG_getSource,
   UG_getParent,
   UG_getDist,
@@ -41,8 +41,8 @@ enum Test_e {
 
 char *testName(int test) {
 
-  if (test == DG_getSize)
-    return "DG_getSize";
+  if (test == DG_getNumArcs)
+    return "DG_getNumArcs";
   if (test == DG_getSource)
     return "DG_getSource";
   if (test == DG_getParent)
@@ -52,8 +52,8 @@ char *testName(int test) {
   if (test == DG_getPath)
     return "DG_getPath";
 
-  if (test == UG_getSize)
-    return "UG_getSize";
+  if (test == UG_getNumEdges)
+    return "UG_getNumEdges";
   if (test == UG_getSource)
     return "UG_getSource";
   if (test == UG_getParent)
@@ -73,21 +73,21 @@ uint8_t runTest(Graph *pA, List *pL, List *pC, int test) {
   List C = *pC;
   switch (test) {
 
-  case DG_getSize: {
-    if (getSize(A) != 0)
+  case DG_getNumArcs: {
+    if (getNumArcs(A) != 0)
       return 1;
     addArc(A, 54, 1);
     addArc(A, 54, 2);
     addArc(A, 54, 3);
     addArc(A, 1, 54);
     addArc(A, 1, 55);
-    if (getSize(A) != 5)
+    if (getNumArcs(A) != 5)
       return 2;
     BFS(A, 67);
-    if (getSize(A) != 5)
+    if (getNumArcs(A) != 5)
       return 3;
     addArc(A, 55, 1);
-    if (getSize(A) != 6)
+    if (getNumArcs(A) != 6)
       return 4;
     return 0;
   }
@@ -179,20 +179,20 @@ uint8_t runTest(Graph *pA, List *pL, List *pC, int test) {
       return 4;
     return 0;
   }
-  case UG_getSize: {
-    if (getSize(A) != 0)
+  case UG_getNumEdges: {
+    if (getNumEdges(A) != 0)
       return 1;
     addEdge(A, 54, 1);
     addEdge(A, 54, 2);
     addEdge(A, 54, 3);
     addEdge(A, 1, 55);
-    if (getSize(A) != 4)
+    if (getNumEdges(A) != 4)
       return 2;
     BFS(A, 67);
-    if (getSize(A) != 4)
+    if (getNumEdges(A) != 4)
       return 3;
     addEdge(A, 55, 2);
-    if (getSize(A) != 5)
+    if (getNumEdges(A) != 5)
       return 4;
     return 0;
   }
@@ -360,7 +360,7 @@ int main(int argc, char **argv) {
     if (argc == 2)
       printf(RED "Receiving charity points because your program crashes\n" NC);
   }
-  printf("\nYou will receive %d out of %d possible points on the ListTests\n\n",
+  printf("\nYou will receive %d out of %d possible points on the GraphTests\n\n",
          totalScore, MAXSCORE);
   exit(0);
   return 0;
