@@ -1,29 +1,28 @@
 #!/bin/bash
 RELATIVE_PATH="../cse-101-public-tests/pa5"
-NUMTESTS=3
-PNTSPERTEST=5
-INPUTS=( 10 50 100 )
+NUMTESTS=5
+PNTSPERTEST=3
 let MAXPTS=$NUMTESTS*$PNTSPERTEST
 
 echo ""
 echo ""
 
-g++ -std=c++17 -Wall -c -g Shuffle.cpp List.cpp
-g++ -std=c++17 -Wall -o Shuffle Shuffle.o List.o
+gcc -std=c17 -Wall -c -g WordFrequency.c Dictionary.c
+gcc -std=c17 -Wall -o WordFrequency WordFrequency.o Dictionary.o
 
 lextestspassed=$(expr 0)
 echo "Please be warned that the following tests discard all output to stdout while reserving stderr for valgrind output"
-echo "Shuffle tests: If nothing between '=' signs, then test is passed"
+echo "WordFreq tests: If nothing between '=' signs, then test is passed"
 echo "Press enter to continue"
 read verbose
-for NUM in "${INPUTS[@]}"; do
+for NUM in $(seq 1 $NUMTESTS); do
   rm -f out$NUM.txt
-  timeout 5 valgrind --leak-check=full -v ./Shuffle $NUM > out$NUM.txt 2> valgrind-out$NUM.txt
+  timeout 5 valgrind --leak-check=full -v ./WordFrequency "$RELATIVE_PATH/"infile$NUM.txt out$NUM.txt 2> valgrind-out$NUM.txt
   if [ $? -eq 124 ]; then
-    echo -e "${RED} SHUFFLE TEST TIMED OUT ${NC}"
+    echo -e "${RED} WORDFREQ TEST TIMED OUT ${NC}"
   fi
-  diff -bBwu out$NUM.txt "$RELATIVE_PATH/"Model-out$NUM.txt &> diff$NUM.txt >> diff$NUM.txt
-  echo "Shuffle Test $NUM: (Press enter to continue...)"
+  diff -bBwu out$NUM.txt "$RELATIVE_PATH/"model-outfile$NUM.txt &> diff$NUM.txt >> diff$NUM.txt
+  echo "WordFreq Test $NUM: (Press enter to continue...)"
   read verbose
   echo "=========="
   cat diff$NUM.txt
@@ -35,19 +34,19 @@ done
 
 let lextestpoints=${PNTSPERTEST}*lextestspassed
 
-echo "Passed $lextestspassed / $NUMTESTS Shuffle tests"
+echo "Passed $lextestspassed / $NUMTESTS WordFreq tests"
 echo "This gives a total of $lextestpoints / $MAXPTS points"
 echo ""
 echo ""
 
-echo "Press Enter To Continue with Valgrind Results for Shuffle"
+echo "Press Enter To Continue with Valgrind Results for WordFreq"
 echo "The valgrind report will only show the number of leaks and errors. For a detail report, please negivate to the corresponding output valgrind-out#.txt"
 #TODO find a way to automate detecting if leaks and errors are found and how many
 read garbage
 
-for NUM in "${INPUTS[@]}"; do
-   echo "Shuffle Valgrind Test $NUM:"
-   # read verbose
+for NUM in $(seq 1 $NUMTESTS); do
+   echo "WordFreq Valgrind Test $NUM: (press enter to continue...)"
+   read verbose
    echo "=========="
    cat valgrind-out$NUM.txt
    echo "=========="
@@ -55,5 +54,5 @@ done
 
 echo ""
 echo ""
-rm -f *.o Shuffle
+rm -f *.o WordFrequency
 

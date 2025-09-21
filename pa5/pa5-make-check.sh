@@ -9,7 +9,7 @@ read garbage
 
 make
 
-if [ ! -e Shuffle ] || [ ! -x Shuffle ]; then # exist and executable
+if [ ! -e WordFrequency ] || [ ! -x WordFrequency ]; then # exist and executable
   echo ""
   echo -e "${RED}Makefile probably doesn't correctly create Executable!!!${NC}"
   echo ""
@@ -24,6 +24,6 @@ make clean
 echo ""
 echo ""
 
-if [ -e Shuffle ] || [ -e *.o ]; then
+if [ -e WordFrequency ] || [ -e *.o ]; then
   echo -e "${RED}WARNING: Makefile didn't successfully clean all files${NC}"
 fi

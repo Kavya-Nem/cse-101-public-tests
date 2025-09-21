@@ -1,7 +1,7 @@
-# cse101-pt.w24/pa5
+# cse101-pt.f25/pa5
 
-The following is a set of performance tests to run on your Shuffle program. It
-takes three input values and compares your results to our correct model
+The following is a set of checks to run on your pa5 submission (WordFrequency/Dictionary). It
+runs WordFrequency on several inputs and compares your output files to our correct model
 outputs. We have made this available to you to check your work before making
 your final submission.
 
