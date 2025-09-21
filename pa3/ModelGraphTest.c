@@ -9,7 +9,7 @@
 #include "../../pa3/Graph.h"
 #include "../../pa3/List.h"
 
-#define FIRST_TEST DG_getSize
+#define FIRST_TEST DG_getNumArcs
 #define MAXSCORE 40
 #define CHARITY 10
 
@@ -24,12 +24,12 @@ static uint8_t disable_exit_handler;
 jmp_buf test_crash;
 
 enum Test_e {
-  DG_getSize = 0, // directed graph tests
+  DG_getNumArcs = 0, // directed graph tests
   DG_getParent,
   DG_getDiscover,
   DG_getFinish,
 
-  UG_getSize, // undirected graph tests
+  UG_getNumEdges, // undirected graph tests
   UG_getParent,
   UG_getDiscover,
   UG_getFinish,
@@ -39,8 +39,8 @@ enum Test_e {
 
 char *testName(int test) {
 
-  if (test == DG_getSize)
-    return "DG_getSize";
+  if (test == DG_getNumArcs)
+    return "DG_getNumArcs";
   if (test == DG_getParent)
     return "DG_getParent";
   if (test == DG_getDiscover)
@@ -48,8 +48,8 @@ char *testName(int test) {
   if (test == DG_getFinish)
     return "DG_getFinish";
 
-  if (test == UG_getSize)
-    return "UG_getSize";
+  if (test == UG_getNumEdges)
+    return "UG_getNumEdges";
   if (test == UG_getParent)
     return "UG_getParent";
   if (test == UG_getDiscover)
@@ -66,27 +66,24 @@ uint8_t runTest(Graph *pA, List *pL, int test) {
   List L = *pL;
   switch (test) {
 
-  case DG_getSize: {
-    if (getSize(A) != 0)
+  case DG_getNumArcs: {
+    if (getNumArcs(A) != 0)
       return 1;
     addArc(A, 54, 1);
     addArc(A, 54, 2);
-    addArc(A, 54, 2);
     addArc(A, 54, 3);
     addArc(A, 1, 54);
-    addArc(A, 1, 54);
     addArc(A, 1, 55);
-    addArc(A, 1, 55);
-    if (getSize(A) != 5)
+    if (getNumArcs(A) != 5)
       return 2;
     for (uint8_t i = 1; i <= 100; i++) {
       append(L, i);
     }
     DFS(A, L);
-    if (getSize(A) != 5)
+    if (getNumArcs(A) != 5)
       return 3;
     addArc(A, 55, 1);
-    if (getSize(A) != 6)
+    if (getNumArcs(A) != 6)
       return 4;
     return 0;
   }
@@ -180,23 +177,23 @@ uint8_t runTest(Graph *pA, List *pL, int test) {
       return 8;
     return 0;
   }
-  case UG_getSize: {
-    if (getSize(A) != 0)
+  case UG_getNumEdges: {
+    if (getNumEdges(A) != 0)
       return 1;
     addEdge(A, 54, 1);
     addEdge(A, 54, 2);
     addEdge(A, 54, 3);
     addEdge(A, 1, 55);
-    if (getSize(A) != 4)
+    if (getNumEdges(A) != 4)
       return 2;
     for (uint8_t i = 1; i <= 100; i++) {
       append(L, i);
     }
     DFS(A, L);
-    if (getSize(A) != 4)
+    if (getNumEdges(A) != 4)
       return 3;
     addEdge(A, 1, 56);
-    if (getSize(A) != 5)
+    if (getNumEdges(A) != 5)
       return 4;
     return 0;
   }
