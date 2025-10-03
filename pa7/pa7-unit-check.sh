@@ -1,7 +1,7 @@
 #!/bin/bash
 RELATIVE_PATH="../cse-101-public-tests/pa7"
 
-MAXTIME=$(($1*5))
+MAXTIME=$((${1:-1}*5))
 
 echo ""
 echo ""

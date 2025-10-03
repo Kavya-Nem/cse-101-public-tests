@@ -10,8 +10,8 @@
 #include "../../pa6/List.h"
 
 #define FIRST_TEST Empty_size
-#define MAXSCORE 10
-#define CHARITY 0
+#define MAXSCORE 53
+#define CHARITY 10
 
 #define RED "\033[0;31m"
 #define CYAN "\033[0;36m"
@@ -854,9 +854,12 @@ int main(int argc, char **argv) {
            << (testStatus == 0 ? GREEN "PASSED" NC : RED "FAILED" NC);
       if (testStatus == 255) {
         cout << ": due to a " RED
-             << (fail_type == 1 ? "segfault"
-                                : (fail_type == 2 ? "program exit"
-                                                  : "program interruption"))
+             << (fail_type == 1
+                     ? "segfault"
+                     : (fail_type == 2
+                            ? "program exit"
+                            : (fail_type == 3 ? "exception being thrown"
+                                              : "program interruption")))
              << NC << endl;
         cout << "\nWARNING: Program will now stop running tests\n" << endl;
         break;
@@ -873,7 +876,7 @@ int main(int argc, char **argv) {
 
   disable_exit_handler = 1;
 
-  uint8_t totalScore = (MAXSCORE - NUM_TESTS) + testsPassed;
+  uint8_t totalScore = (testsPassed / 2) * 3 + (testsPassed % 2) * 2;
 
   if (argc == 2 && testStatus != 255)
     cout << "\nYou passed " << unsigned(testsPassed) << " out of " << NUM_TESTS

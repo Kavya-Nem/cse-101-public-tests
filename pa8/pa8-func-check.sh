@@ -6,7 +6,7 @@ NC='\033[0m' # No Color
 
 NUMTESTS=5
 PNTSPERTEST=3
-MAXTIME=$(($1*15))
+MAXTIME=$((${1:-1}*15))
 let MAXPTS=$NUMTESTS*$PNTSPERTEST
 
 echo ""

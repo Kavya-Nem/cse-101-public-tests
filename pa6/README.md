@@ -1,7 +1,7 @@
 # cse101-pt.w24/pa6
 
-The following is a set of performance tests to run on your Arithmetic program. It
-takes five example input files and compares your results to our correct model
+The following is a set of performance tests to run on your Shuffle program. It
+takes three input values and compares your results to our correct model
 outputs. We have made this available to you to check your work before making
 your final submission.
 

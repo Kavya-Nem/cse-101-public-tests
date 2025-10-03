@@ -1,6 +1,6 @@
 #!/bin/bash
 RELATIVE_PATH="../cse-101-public-tests/pa8"
-MAXTIME=$(($1*6))
+MAXTIME=$((${1:-1}*6))
 
 
 echo ""

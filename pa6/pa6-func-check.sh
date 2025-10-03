@@ -1,48 +1,59 @@
 #!/bin/bash
 RELATIVE_PATH="../cse-101-public-tests/pa6"
-NUMTESTS=5
-PNTSPERTEST=4
+NUMTESTS=3
+PNTSPERTEST=5
+INPUTS=( 10 50 100 )
 let MAXPTS=$NUMTESTS*$PNTSPERTEST
-TIME=30
-
-rm -f *.o Arithmetic
-
-g++ -std=c++17 -Wall -c -g Arithmetic.cpp BigInteger.cpp List.cpp -lm
-g++ -std=c++17 -Wall -o Arithmetic Arithmetic.o BigInteger.o List.o -lm
-
 
 echo ""
 echo ""
 
-passed=$(expr 0)
-echo "Please be warned that the following tests discard all output to stdout/stderr"
-echo "Arithmetic tests: If nothing between '=' signs, then test is passed"
+g++ -std=c++17 -Wall -c -g Shuffle.cpp List.cpp
+g++ -std=c++17 -Wall -o Shuffle Shuffle.o List.o
+
+lextestspassed=$(expr 0)
+echo "Please be warned that the following tests discard all output to stdout while reserving stderr for valgrind output"
+echo "Shuffle tests: If nothing between '=' signs, then test is passed"
 echo "Press enter to continue"
 read verbose
-for NUM in $(seq 1 $NUMTESTS); do
-  rm -f outfile$NUM.txt
-  let RUNTIME=$TIME
-  if [ $NUM -eq 5 ]; then
-    let RUNTIME=40
+for NUM in "${INPUTS[@]}"; do
+  rm -f out$NUM.txt
+  timeout 5 valgrind --leak-check=full -v ./Shuffle $NUM > out$NUM.txt 2> valgrind-out$NUM.txt
+  if [ $? -eq 124 ]; then
+    echo -e "${RED} SHUFFLE TEST TIMED OUT ${NC}"
   fi
-  timeout "${RUNTIME}" ./Arithmetic "$RELATIVE_PATH/"infile$NUM.txt outfile$NUM.txt &> garbage >> garbage #all stdout/stderr thrown away
-  diff -bBwu outfile$NUM.txt "$RELATIVE_PATH/"model-outfile$NUM.txt > diff$NUM.txt &>> diff$NUM.txt
-  echo "Arithmetic Test $NUM:"
+  diff -bBwu out$NUM.txt "$RELATIVE_PATH/"Model-out$NUM.txt &> diff$NUM.txt >> diff$NUM.txt
+  echo "Shuffle Test $NUM: (Press enter to continue...)"
+  read verbose
   echo "=========="
   cat diff$NUM.txt
   echo "=========="
-  if [ -e diff$NUM.txt ] && [[ ! -s diff$NUM.txt ]]; then # increment number of tests passed counter
-    let passed+=1
+  if [ -e diff$NUM.txt ] && [[ ! -s diff$NUM.txt ]]; then
+    let lextestspassed+=1
   fi
 done
 
-let testspoints=$PNTSPERTEST*$passed
-if [ "$testspoints" -gt "$MAXPTS" ]; then # max 10 points
-  let testspoints=$(expr $MAXPTS)
-fi
-echo "Passed $passed Arithmetic tests for a total of $testspoints / $MAXPTS points"
+let lextestpoints=${PNTSPERTEST}*lextestspassed
 
+echo "Passed $lextestspassed / $NUMTESTS Shuffle tests"
+echo "This gives a total of $lextestpoints / $MAXPTS points"
 echo ""
 echo ""
 
-rm -f *.o Arithmetic garbage diff*
+echo "Press Enter To Continue with Valgrind Results for Shuffle"
+echo "The valgrind report will only show the number of leaks and errors. For a detail report, please negivate to the corresponding output valgrind-out#.txt"
+#TODO find a way to automate detecting if leaks and errors are found and how many
+read garbage
+
+for NUM in "${INPUTS[@]}"; do
+   echo "Shuffle Valgrind Test $NUM:"
+   # read verbose
+   echo "=========="
+   cat valgrind-out$NUM.txt
+   echo "=========="
+done
+
+echo ""
+echo ""
+rm -f *.o Shuffle
+

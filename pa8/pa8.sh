@@ -9,5 +9,5 @@ echo $EXE_RANGE
 for i in $(seq 0 $EXE_RANGE); do
   FULLPATH="$RELATIVE_PATH/${EXE_ALL[i]}"
   chmod +x $FULLPATH
-  ./$FULLPATH $1
+  ./$FULLPATH "${1:-1}"
 done

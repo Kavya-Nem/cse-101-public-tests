@@ -4,7 +4,7 @@ RED='\033[0;31m'
 GREEN='\033[0;32m'
 NC='\033[0m' # No Color
 
-MAXTIME=$(($1*20))
+MAXTIME=$((${1:-1}*20))
 
 NUMTESTS=5
 PNTSPERTEST=3
