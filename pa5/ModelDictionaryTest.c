@@ -1,4 +1,5 @@
 #define _GNU_SOURCE
+#include <ctype.h>
 #include <setjmp.h>
 #include <signal.h>
 #include <stdbool.h>
@@ -7,9 +8,10 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "expected.h"
 #include "../../pa5/Dictionary.h"
 
-#define FIRST_TEST Empty_size
+#define FIRST_TEST Empty_diagnostic
 #define MAXSCORE 60
 #define CHARITY 10
 
@@ -24,8 +26,8 @@ static uint8_t disable_exit_handler;
 jmp_buf test_crash;
 
 enum Test_e {
-  Empty_size = 0,
-  Insert_size,
+  Empty_diagnostic = 0,
+  Insert_diagnostic,
   Overwrite_size,
   Contains_basic,
   GetValue_basic,
@@ -41,8 +43,8 @@ enum Test_e {
 
 char *testName(int test) {
   switch (test) {
-  case Empty_size: return "Empty_size";
-  case Insert_size: return "Insert_size";
+  case Empty_diagnostic: return "Empty_diagnostic";
+  case Insert_diagnostic: return "Insert_diagnostic";
   case Overwrite_size: return "Overwrite_size";
   case Contains_basic: return "Contains_basic";
   case GetValue_basic: return "GetValue_basic";
@@ -62,6 +64,30 @@ static bool expectValue(Dictionary D, const char *k, int expected) {
   return getValue(D, k) == expected;
 }
 
+static bool equalsIgnoreWhitespace(const char *lhs, const char *rhs) {
+  if (!lhs) lhs = "";
+  if (!rhs) rhs = "";
+  while (true) {
+    while (*lhs && isspace((unsigned char)*lhs)) lhs++;
+    while (*rhs && isspace((unsigned char)*rhs)) rhs++;
+    if (*lhs == '\0' || *rhs == '\0') return *lhs == '\0' && *rhs == '\0';
+    if (*lhs != *rhs) return false;
+    lhs++;
+    rhs++;
+  }
+}
+
+bool expectDiagnostic(Dictionary D, const char *expected) {
+  char *buf = NULL;
+  size_t len = 0;
+  FILE *mem = open_memstream(&buf, &len);
+  printDiagnostic(mem, D);
+  fclose(mem);
+  bool matches = equalsIgnoreWhitespace(buf, expected);
+  free(buf);
+  return matches;
+}
+
 // return 0 if pass otherwise the number of the test that was failed
 uint8_t runTest(int test) {
   Dictionary A = newDictionary();
@@ -69,15 +95,17 @@ uint8_t runTest(int test) {
   Dictionary C = NULL;
   uint8_t rc = 0;
   switch (test) {
-  case Empty_size: {
-    if (size(A) != 0) rc = 1;
+  case Empty_diagnostic: {
+    if (size(A) != 0) { rc = 1; break; }
+    if (!expectDiagnostic(A, empty_expected)) rc = 2;
     break;
   }
-  case Insert_size: {
+  case Insert_diagnostic: {
     setValue(A, "apple", 1);
     setValue(A, "banana", 2);
     setValue(A, "cherry", 3);
-    if (size(A) != 3) rc = 1;
+    if (size(A) != 3) { rc = 1; break; }
+    if (!expectDiagnostic(A, insert_expected)) rc = 2;
     break;
   }
   case Overwrite_size: {
