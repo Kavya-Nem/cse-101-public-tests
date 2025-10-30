@@ -28,16 +28,14 @@ jmp_buf test_crash;
 enum Test_e {
   Empty_diagnostic = 0,
   Insert_diagnostic,
-  Overwrite_size,
-  Contains_basic,
-  GetValue_basic,
-  RemoveKey_basic,
-  Clear_basic,
+  Lookup_overwrite,
+  Remove_diagnostic,
   Copy_independence,
-  Equals_basic,
+  Equals_consistency,
   Stress_expand,
-  Remove_many,
+  Clear_basic,
   Print_insert_order,
+  Expand_compact,
   NUM_TESTS
 };
 
@@ -45,16 +43,14 @@ char *testName(int test) {
   switch (test) {
   case Empty_diagnostic: return "Empty_diagnostic";
   case Insert_diagnostic: return "Insert_diagnostic";
-  case Overwrite_size: return "Overwrite_size";
-  case Contains_basic: return "Contains_basic";
-  case GetValue_basic: return "GetValue_basic";
-  case RemoveKey_basic: return "RemoveKey_basic";
-  case Clear_basic: return "Clear_basic";
+  case Lookup_overwrite: return "Lookup_overwrite";
+  case Remove_diagnostic: return "Remove_diagnostic";
   case Copy_independence: return "Copy_independence";
-  case Equals_basic: return "Equals_basic";
+  case Equals_consistency: return "Equals_consistency";
   case Stress_expand: return "Stress_expand";
-  case Remove_many: return "Remove_many";
+  case Clear_basic: return "Clear_basic";
   case Print_insert_order: return "Print_insert_order";
+  case Expand_compact: return "Expand_compact";
   default: return "";
   }
 }
@@ -108,129 +104,186 @@ uint8_t runTest(int test) {
     if (!expectDiagnostic(A, insert_expected)) rc = 2;
     break;
   }
-  case Overwrite_size: {
-    setValue(A, "k", 5);
-    if (size(A) != 1) { rc = 1; break; }
-    setValue(A, "k", 7); // overwrite
-    if (size(A) != 1) { rc = 2; break; }
-    if (!expectValue(A, "k", 7)) rc = 3;
-    break;
-  }
-  case Contains_basic: {
+  case Lookup_overwrite: {
     setValue(A, "one", 1);
     setValue(A, "two", 2);
-    if (!contains(A, "one")) { rc = 1; break; }
-    if (contains(A, "three")) rc = 2;
+    setValue(A, "three", 3);
+    if (size(A) != 3) { rc = 1; break; }
+    if (!contains(A, "one") || !expectValue(A, "one", 1)) { rc = 2; break; }
+    if (contains(A, "four")) { rc = 3; break; }
+    if (!expectDiagnostic(A, lookup1_expected)) { rc = 4; break; }
+    setValue(A, "two", 22);
+    if (size(A) != 3) { rc = 5; break; }
+    if (!expectValue(A, "two", 22)) { rc = 6; break; }
+    setValue(A, "four", 44);
+    if (size(A) != 4) { rc = 7; break; }
+    if (!expectValue(A, "four", 44) || !contains(A, "four")) { rc = 8; break; }
+    if (!expectDiagnostic(A, lookup2_expected)) rc = 9;
     break;
   }
-  case GetValue_basic: {
-    setValue(A, "alpha", 11);
-    setValue(A, "beta", 22);
-    setValue(A, "gamma", 33);
-    if (!expectValue(A, "beta", 22)) { rc = 1; break; }
-    setValue(A, "beta", 44);
-    if (!expectValue(A, "beta", 44)) rc = 2;
-    break;
-  }
-  case RemoveKey_basic: {
-    setValue(A, "x", 9);
-    setValue(A, "y", 8);
-    if (size(A) != 2) { rc = 1; break; }
-    removeKey(A, "x");
+  case Remove_diagnostic: {
+    const char *keys[] = {"one", "two", "three"};
+    for (int i = 0; i < 3; i++) {
+      setValue(A, keys[i], i + 1);
+    }
+    removeKey(A, "one");
+    removeKey(A, "three");
+    if (contains(A, "one") || contains(A, "three")) { rc = 1; break; }
     if (size(A) != 1) { rc = 2; break; }
-    if (contains(A, "x")) rc = 3;
-    break;
-  }
-  case Clear_basic: {
-    setValue(A, "a", 1);
-    setValue(A, "b", 2);
-    clear(A);
-    if (size(A) != 0) { rc = 1; break; }
-    setValue(A, "c", 3);
-    if (size(A) != 1 || !contains(A, "c")) rc = 2;
+    if (!expectValue(A, "two", 2)) { rc = 3; break; }
+    if (!expectDiagnostic(A, remove_expected)) { rc = 4; break; }
+    setValue(A, "one", 10);
+    if (!expectValue(A, "one", 10)) { rc = 5; break; }
+    if (size(A) != 2) { rc = 5; break; }
+    setValue(A, "three", 30);
+    if (!expectValue(A, "three", 30)) rc = 6;
     break;
   }
   case Copy_independence: {
-    setValue(A, "foo", 10);
-    setValue(A, "bar", 20);
+    setValue(A, "10", 10);
+    setValue(A, "20", 20);
+    setValue(A, "30", 30);
     C = copy(A);
-    if (size(C) != 2) { rc = 1; break; }
-    setValue(A, "foo", 30); // modify original
-    if (!expectValue(A, "foo", 30)) { rc = 2; break; }
-    if (!expectValue(C, "foo", 10)) rc = 3; // copy should retain old value
+    if (size(C) != 3) { rc = 1; break; }
+    setValue(A, "10", 100);
+    removeKey(A, "20");
+    setValue(A, "new", 500);
+    if (!expectValue(A, "10", 100)) { rc = 2; break; }
+    if (contains(A, "20")) { rc = 3; break; }
+    if (contains(C, "new")) { rc = 4; break; }
+    if (!expectValue(C, "20", 20) || !expectValue(C, "30", 30)) { rc = 5; break; }
+    removeKey(C, "30");
+    if (!expectValue(A, "30", 30)) { rc = 6; break; }
+    if (contains(C, "30")) { rc = 7; break; }
+    if (size(A) != 3) { rc = 8; break; }
+    if (size(C) != 2) rc = 9;
     break;
   }
-  case Equals_basic: {
-    if (!equals(A, B)) { rc = 1; break; }
-    setValue(A, "key", 1);
-    if (equals(A, B)) { rc = 2; break; }
-    setValue(B, "key", 1);
-    if (!equals(A, B)) { rc = 3; break; }
-    setValue(A, "key", 2);
-    if (equals(A, B)) { rc = 4; break; }
-    setValue(B, "key", 2);
-    if (!equals(A, B)) rc = 5;
+  case Equals_consistency: {
+    const char *seqA[] = {"one", "two", "three", "four"};
+    for (int i = 0; i < 4; i++) setValue(A, seqA[i], i + 1);
+    
+    if (!equals(A, A)) { rc = 1; break; }
+    setValue(B, "three", 3);
+    setValue(B, "one", 1);
+    setValue(B, "four", 4);
+    setValue(B, "two", 2);
+    if (!equals(A, B) || !equals(B, A)) { rc = 2; break; }
+    setValue(A, "five", 5);
+    if (equals(A, B)) { rc = 3; break; }
+    setValue(B, "five", 5);
+    if (!equals(A, B)) { rc = 4; break; }
+    removeKey(B, "two");
+    if (equals(A, B)) { rc = 5; break; }
+    removeKey(A, "two");
+    if (!equals(A, B)) rc = 6;
     break;
   }
   case Stress_expand: {
-    // insert enough keys to force table expansion
-    const int N = 2000;
-    char keys[2000][16];
+    const int N = 4096;
+    char keys[4096][16];
     for (int i = 0; i < N; i++) {
-      snprintf(keys[i], 16, "k%04d", i);
+      snprintf(keys[i], sizeof keys[i], "k%05d", i);
       setValue(A, keys[i], i);
     }
     if (size(A) != N) rc = 1;
-    if (!expectValue(A, keys[123], 123) || !expectValue(A, keys[1999], 1999)) rc = 2;
+    if (rc) break;
+    int sampleIdx[] = {0, 57, 1023, 2048, N - 1};
+    for (size_t i = 0; i < sizeof(sampleIdx)/sizeof(sampleIdx[0]); i++) {
+      int idx = sampleIdx[i];
+      if (!expectValue(A, keys[idx], idx)) { rc = 2; break; }
+    }
+    if (rc) break;
+    int removed = 0;
+    for (int i = 0; i < N; i += 97) {
+      removeKey(A, keys[i]);
+      removed++;
+    }
+    if (size(A) != N - removed) { rc = 3; break; }
+    for (int i = 0; i < N; i += 97) {
+      if (contains(A, keys[i])) { rc = 4; break; }
+    }
+    if (rc) break;
+    if (!expectValue(A, keys[58], 58) || !expectValue(A, keys[2050], 2050)) rc = 5;
     break;
   }
-  case Remove_many: {
-    char keys[10][4];
-    for (int i = 0; i < 10; i++) {
+  case Clear_basic: {
+    const int total = 40;
+    char keys[total][8];
+    for (int i = 0; i < total; i++) {
       snprintf(keys[i], sizeof keys[i], "k%d", i);
       setValue(A, keys[i], i);
     }
-    // remove even keys
-    for (int i = 0; i < 10; i += 2) {
-      removeKey(A, keys[i]);
+    if (size(A) != total) { rc = 1; break; }
+
+    clear(A);
+    if (size(A) != 0) { rc = 2; break; }
+    for (int i = 0; i < total; i++) {
+      if (contains(A, keys[i])) { rc = 3; break; }
     }
-    if (size(A) != 5) { rc = 1; }
-    if (!rc) {
-      // check that odd keys remain
-      for (int i = 1; i < 10; i += 2) {
-        if (!contains(A, keys[i])) { rc = 2; break; }
-      }
+    if (rc) break;
+
+    clear(A);
+    if (size(A) != 0) { rc = 4; break; }
+
+    for (int i = 0; i < total; i += 2) {
+      setValue(A, keys[i], i * 10);
+      if (!expectValue(A, keys[i], i * 10)) { rc = 5; break; }
     }
-    if (!rc) {
-      // should still be possible to indert after deletions and expansions
-      setValue(A, "newKey", 42);
-      if (!expectValue(A, "newKey", 42)) rc = 3;
+    if (rc) break;
+
+    int expectedSize = (total + 1) / 2;
+    if (size(A) != expectedSize) { rc = 6; break; }
+    for (int i = 1; i < total; i += 2) {
+      if (contains(A, keys[i])) { rc = 7; break; }
     }
     break;
   }
   case Print_insert_order: {
-    // checks that insertion order is preserved and skips deleted entries
-    setValue(A, "one", 1);
-    setValue(A, "two", 2);
-    setValue(A, "three", 3);
-    setValue(A, "four", 4);
+    const char *keys[] = {"one", "two", "three", "four", "five"};
+    for (int i = 0; i < 5; i++) setValue(A, keys[i], i + 1);
+    
     removeKey(A, "two");
+    removeKey(A, "four");
+    setValue(A, "two", 22);
+    setValue(A, "six", 6);
 
-    const char* expected = "one : 1\nthree : 3\nfour : 4\n";
-
-    char* buf = NULL;
+    const char *expected = "one : 1\nthree : 3\nfive : 5\ntwo : 22\nsix : 6\n";
+    char *buf = NULL;
     size_t len = 0;
-    int cmp = -1;
-
-    FILE* mem = open_memstream(&buf, &len);
+    FILE *mem = open_memstream(&buf, &len);
     printDictionary(mem, A);
     fclose(mem);
 
-    cmp = strcmp(buf ? buf : "", expected);
+    int cmp = strcmp(buf ? buf : "", expected);
     free(buf);
-    buf = NULL;
-
     if (cmp != 0) rc = 1;
+    break;
+  }
+  case Expand_compact: {
+    char keys[16][6];
+    for (int i = 0; i < 16; i++) {
+      snprintf(keys[i], sizeof keys[i], "k%02d", i);
+      setValue(A, keys[i], i);
+    }
+    if (!expectDiagnostic(A, expand1_expected)) { rc = 1; break; }
+
+    for (int i = 0; i < 12; i++) removeKey(A, keys[i]);
+    if (!expectDiagnostic(A, expand2_expected)) { rc = 2; break; }
+    // numPairs=4, numDeleted=12
+    // dataDensity = 0.25
+
+    char newKeys[18][6];
+    for (int i = 0; i < 18; i++) {
+      snprintf(newKeys[i], sizeof newKeys[i], "n%02d", i);
+      setValue(A, newKeys[i], i + 100);
+    }
+    // numPairs=22, numDeleted=12
+    // tableLoadFactor = 22/32 approx 0.69 > 0.67
+    // dataDensity = 22/(22+12) approx 0.65 > 0.8
+    // so compactify should happen
+    
+    if (!expectDiagnostic(A, compact_expected)) rc = 3;
     break;
   }
   default: rc = 254; break;
@@ -290,7 +343,7 @@ int main(int argc, char **argv) {
   }
 
   disable_exit_handler = 1;
-  uint8_t totalScore = (MAXSCORE - NUM_TESTS * 5) + testsPassed * 5;
+  uint8_t totalScore = (MAXSCORE - NUM_TESTS * 6) + testsPassed * 6;
 
   if (argc == 2) {
     if (testStatus == 255) {
