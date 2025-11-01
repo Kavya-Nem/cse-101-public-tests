@@ -20,5 +20,5 @@ echo "List Valgrind Test: (press enter)"
 read garbage
 cat ListTest-mem.txt
 
-rm -f *.o ModelListTest* Lex ListTest-out.txt ListTest-mem.txt
+rm -f *.o ModelListTest* Words ListTest-out.txt ListTest-mem.txt
 
