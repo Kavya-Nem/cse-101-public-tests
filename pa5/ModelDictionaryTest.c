@@ -9,7 +9,7 @@
 #include <string.h>
 
 #include "expected.h"
-#include "../../pa5/Dictionary.h"
+#include "Dictionary.h"
 
 #define FIRST_TEST Empty_diagnostic
 #define MAXSCORE 60
@@ -28,8 +28,10 @@ jmp_buf test_crash;
 enum Test_e {
   Empty_diagnostic = 0,
   Insert_diagnostic,
+  Unique_keys_insertion,
   Lookup_overwrite,
   Remove_diagnostic,
+  Deletion_recycling,
   Copy_independence,
   Equals_consistency,
   Stress_expand,
@@ -43,8 +45,10 @@ char *testName(int test) {
   switch (test) {
   case Empty_diagnostic: return "Empty_diagnostic";
   case Insert_diagnostic: return "Insert_diagnostic";
+  case Unique_keys_insertion: return "Unique_keys_insertion";
   case Lookup_overwrite: return "Lookup_overwrite";
   case Remove_diagnostic: return "Remove_diagnostic";
+  case Deletion_recycling: return "Deletion_recycling";
   case Copy_independence: return "Copy_independence";
   case Equals_consistency: return "Equals_consistency";
   case Stress_expand: return "Stress_expand";
@@ -104,6 +108,24 @@ uint8_t runTest(int test) {
     if (!expectDiagnostic(A, insert_expected)) rc = 2;
     break;
   }
+  case Unique_keys_insertion: {
+    // empty key
+    setValue(A, "", 123);
+    if (!expectValue(A, "", 123)) { rc = 1; break; }
+  
+    // long key (~1.5KB)
+    char big[1600];
+    memset(big, 'x', sizeof big - 1);
+    big[sizeof big - 1] = '\0';
+    setValue(A, big, 777);
+    if (!expectValue(A, big, 777)) rc = 2;
+
+    char tmp[8]; 
+    strcpy(tmp, "dup");
+    setValue(A, tmp, 7);
+    if (size(A) != 3 || !expectValue(A, "dup", 7)) rc = 3;
+    break;
+  }
   case Lookup_overwrite: {
     setValue(A, "one", 1);
     setValue(A, "two", 2);
@@ -137,6 +159,82 @@ uint8_t runTest(int test) {
     if (size(A) != 2) { rc = 5; break; }
     setValue(A, "three", 30);
     if (!expectValue(A, "three", 30)) rc = 6;
+    break;
+  }
+  case Deletion_recycling: {
+    const int BATCH = 256;
+    const int ROUNDS = 3;
+    char tkeys[BATCH][16];
+    char ukeys[ROUNDS][BATCH][24];
+  
+    for (int i = 0; i < BATCH; i++) {
+      snprintf(tkeys[i], sizeof tkeys[i], "t%03d", i);
+      setValue(A, tkeys[i], i);
+    }
+    for (int i = 0; i < BATCH; i += 2) {
+      removeKey(A, tkeys[i]);
+    }
+  
+    int survivors = BATCH / 2;
+    int total_newcomers = 0;
+    int total_unique_reinserts = 0;
+  
+    // Make sure no overlap between rounds
+    const int R0[] = {  8,  12,  24,  36,  44,  52,  60,  72 };
+    const int R1[] = { 100, 104, 112, 124, 132, 144, 156, 168 };
+    const int R2[] = { 200, 204, 212, 220, 224, 228, 232, 236 };
+  
+    const int* Rset[3] = { R0, R1, R2 };
+    const int  Rcnt[3] = { 8, 8, 8 };
+  
+    // Rounds: insert newcomers and reinsert a distinct subset each round
+    for (int r = 0; r < ROUNDS; r++) {
+      for (int i = 0; i < BATCH; i++) {
+        snprintf(ukeys[r][i], sizeof ukeys[r][i], "u%d_%03d", r, i);
+        setValue(A, ukeys[r][i], 10000 + r*1000 + i);
+      }
+      total_newcomers += BATCH;
+      for (int i = 0; i < BATCH; i += 37) {
+        if (!expectValue(A, ukeys[r][i], 10000 + r*1000 + i)) { rc = 1; break; }
+      }
+      if (rc) break;
+  
+      // Reinsert the round’s even t-keys with new values
+      for (int k = 0; k < Rcnt[r]; k++) {
+        int idx = Rset[r][k];
+        setValue(A, tkeys[idx], 7000 + r*100 + k);
+      }
+      total_unique_reinserts += Rcnt[r];
+  
+      for (int k = 0; k < Rcnt[r]; k++) {
+        int idx = Rset[r][k];
+        if (!expectValue(A, tkeys[idx], 7000 + r*100 + k)) { rc = 2; break; }
+      }
+      if (rc) break;
+  
+      for (int i = 1; i < BATCH; i += 17) {
+        if ((i % 2) == 0) continue;
+        if (!contains(A, tkeys[i])) { rc = 3; break; }
+      }
+      if (rc) break;
+    }
+    if (rc) break;
+  
+    int expected = survivors + total_newcomers + total_unique_reinserts;
+    if (size(A) != expected) { rc = 4; break; }
+  
+    // Pick a couple of evens not in any R-set
+    int should_be_gone[] = { 2, 14, 26, 58, 190, 250 };
+    for (int i = 0; i < 6; i++) {
+      if (contains(A, tkeys[should_be_gone[i]])) { rc = 5; break; }
+    }
+    if (rc) break;
+  
+    // Check newcomers from the last round
+    for (int i = 5; i < BATCH; i += 51) {
+      if (!expectValue(A, ukeys[ROUNDS-1][i], 10000 + (ROUNDS-1)*1000 + i)) { rc = 6; break; }
+    }
+  
     break;
   }
   case Copy_independence: {
@@ -343,7 +441,7 @@ int main(int argc, char **argv) {
   }
 
   disable_exit_handler = 1;
-  uint8_t totalScore = (MAXSCORE - NUM_TESTS * 6) + testsPassed * 6;
+  uint8_t totalScore = (MAXSCORE - NUM_TESTS * 5) + testsPassed * 5;
 
   if (argc == 2) {
     if (testStatus == 255) {
