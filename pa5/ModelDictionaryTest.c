@@ -9,7 +9,7 @@
 #include <string.h>
 
 #include "expected.h"
-#include "Dictionary.h"
+#include "../../pa5/Dictionary.h"
 
 #define FIRST_TEST Empty_diagnostic
 #define MAXSCORE 60
