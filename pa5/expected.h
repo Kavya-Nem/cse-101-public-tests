@@ -175,7 +175,7 @@ const char* compact_expected =
     "numPairs: 22\n"
     "numDeleted: 0\n"
     "dataSize: 41\n"
-    "dataNextIndex: 35\n"
+    "dataNextIndex: 23\n"
     "dataDensity: 1.000000\n"
 
     "Table:\n"
