@@ -8,7 +8,7 @@ echo ""
 echo ""
 
 gcc -std=c17 -Wall -c -g "$RELATIVE_PATH/"ModelDictionaryTest.c Dictionary.c
-gcc -std=c17 -Wall -o ModelDictionaryTest ModelDictionaryTest.o Dictionary.o
+gcc -std=c17 -Wall -o ModelDictionaryTest ModelDictionaryTest.o Dictionary.o -lm
 
 timeout 10 valgrind --leak-check=full -v ./ModelDictionaryTest -v > DictionaryTest-out.txt 2> DictionaryTest-mem.txt
 if [ $? -eq 124 ]; then

@@ -8,7 +8,7 @@ echo ""
 echo ""
 
 gcc -std=c17 -Wall -c -g WordFrequency.c Dictionary.c
-gcc -std=c17 -Wall -o WordFrequency WordFrequency.o Dictionary.o
+gcc -std=c17 -Wall -o WordFrequency WordFrequency.o Dictionary.o -lm
 
 lextestspassed=$(expr 0)
 echo "Please be warned that the following tests discard all output to stdout while reserving stderr for valgrind output"
