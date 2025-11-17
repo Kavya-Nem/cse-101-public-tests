@@ -10,7 +10,7 @@ read garbage
 
 make -j8
 
-if [ ! -e Order ] || [ ! -x Order ]; then # exist and executable
+if [ ! -e Words ] || [ ! -x Words ]; then # exist and executable
   echo ""
   echo -e "${RED}Makefile probably doesn't correctly create Executable!!!${NC}"
   echo ""
@@ -25,6 +25,6 @@ make clean
 echo ""
 echo ""
 
-if [ -e Order ] || [ -e *.o ]; then
+if [ -e Words ] || [ -e *.o ]; then
    echo -e "${RED}WARNING: Makefile didn't successfully clean all files${NC}"
 fi
