@@ -1,6 +1,6 @@
 # cse101-pt.w24/pa8
 
-The following is a set of performance tests to run on your Order program. It
+The following is a set of performance tests to run on your Words program. It
 takes three example input files and compares your results to our correct model
 outputs. We have made this available to you to check your work before making
 your final submission.

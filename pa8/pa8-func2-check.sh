@@ -31,7 +31,7 @@ for NUM in $(seq 1 $NUMTESTS); do
   echo "=========="
   cat WF-diff$NUM.txt
   if [[ $tooSlow -eq 1 ]] || [[ $t -eq 124 ]]; then
-    echo -e "${RED}ORDER TEST TIMED OUT (Slower than $MAXTIME) ${NC}"
+    echo -e "${RED}WORDS TEST TIMED OUT (Slower than $MAXTIME) ${NC}"
   fi
   echo "=========="
   if [ -e WF-diff$NUM.txt ] && [[ ! -s WF-diff$NUM.txt ]] && [[ $tooSlow -eq 0 ]] && [[ ! $t -eq 124 ]]; then

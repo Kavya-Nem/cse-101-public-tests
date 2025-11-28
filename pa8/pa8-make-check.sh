@@ -9,15 +9,15 @@ echo "press Enter for make tests"
 read garbage
 
 make WordFrequency
-make Order
+make Words
 
-if [ ! -e Order ] || [ ! -x Order ]; then # exist and executable
+if [ ! -e Words ] || [ ! -x Words ]; then # exist and executable
   echo ""
-  echo -e "${RED}Makefile probably doesn't correctly create Order!!${NC}"
+  echo -e "${RED}Makefile probably doesn't correctly create Words!!${NC}"
   echo ""
 else
   echo ""
-  echo -e "${GREEN}Makefile probably correctly creates Order!${NC}"
+  echo -e "${GREEN}Makefile probably correctly creates Words!${NC}"
   echo ""
 fi
 
@@ -36,6 +36,6 @@ make clean
 echo ""
 echo ""
 
-if [ -e Order ] || [ -e *.o ]; then
+if [ -e Words ] || [ -e *.o ]; then
    echo -e "${RED}WARNING: Makefile didn't successfully clean all files${NC}"
 fi
