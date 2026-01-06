@@ -1,8 +1,0 @@
-(3, 0, 5, 4, 2, 1)
-
-Four
-One
-five
-one
-three
-two

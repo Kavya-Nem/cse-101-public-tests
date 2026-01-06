@@ -1,6 +1,0 @@
-One, two + :)
-two::One,,,three
-three/two
-Four
-one, five=three
-
