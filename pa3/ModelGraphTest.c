@@ -85,6 +85,8 @@ uint8_t runTest(Graph *pA, List *pL, int test) {
     addArc(A, 55, 1);
     if (getNumArcs(A) != 6)
       return 4;
+    if (getNumEdges(A) != 0)
+      return 5;
     return 0;
   }
   case DG_getParent: {
@@ -195,6 +197,8 @@ uint8_t runTest(Graph *pA, List *pL, int test) {
     addEdge(A, 1, 56);
     if (getNumEdges(A) != 5)
       return 4;
+    if (getNumArcs(A) != 0)
+      return 5;
     return 0;
   }
   case UG_getParent: {
