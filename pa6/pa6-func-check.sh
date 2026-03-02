@@ -41,7 +41,7 @@ echo ""
 echo ""
 
 echo "Press Enter To Continue with Valgrind Results for Shuffle"
-echo "The valgrind report will only show the number of leaks and errors. For a detail report, please negivate to the corresponding output valgrind-out#.txt"
+echo "The valgrind report will only show the number of leaks and errors. For a detail report, please navigate to the corresponding output valgrind-out#.txt"
 #TODO find a way to automate detecting if leaks and errors are found and how many
 read garbage
 
