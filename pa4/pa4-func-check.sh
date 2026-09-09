@@ -2,8 +2,6 @@
 RELATIVE_PATH="../cse-101-public-tests/pa4"
 NUMTESTS=5
 TIME=5
-RED='\033[0;31m'
-NC='\033[0m' # No Color
 
 gcc -c -Wall -std=c17 -g Sparse.c Matrix.c List.c
 gcc -o Sparse Sparse.o Matrix.o List.o
@@ -40,3 +38,4 @@ fi
 if [ $valgrindTimeout -eq 124 ] || [ ! $bytes -eq 0 ]; then
   exit 2
 fi
+
