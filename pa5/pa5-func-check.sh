@@ -14,7 +14,7 @@ for NUM in $(seq 1 $NUMTESTS); do
   userTime=$(cat time$NUM.txt)
   tooSlow=$(echo "$userTime > $RUNTIME" |bc -l)
   diff -bBwu out$NUM.txt "$RELATIVE_PATH/"model-outfile$NUM.txt &> diff$NUM.txt
-  if [ -f diff$NUM.txt ] && [[ ! -s diff$NUM.txt ]] && [ ! $tooSlow -eq 1 ] && [ ! $t -eq 124 ]; then
+  if [ -f diff$NUM.txt ] && [[ ! -s diff$NUM.txt ]] && [ ! $tooSlow -eq 1 ] && [ $t -eq 0 ]; then
     let lextestspassed+=1
   fi
 done
