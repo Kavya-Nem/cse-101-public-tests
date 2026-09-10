@@ -9,7 +9,7 @@ g++ -std=c++17 -Wall -o Words Words.o Dictionary.o
 
 wordstestspassed=0
 for NUM in $(seq 1 $NUMTESTS); do
-  let $MAXTIME=$RUNTIME*3
+  let MAXTIME=$RUNTIME*3
   timeout $MAXTIME /usr/bin/time -o time$NUM.txt -f "%U" ./Words "$RELATIVE_PATH/"infile$NUM.txt outfile$NUM.txt &> /dev/null
   t=$?
   userTime=$(cat time$NUM.txt)
