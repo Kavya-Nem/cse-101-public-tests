@@ -19,18 +19,14 @@ for NUM in $(seq 1 $NUMTESTS); do
   fi
 done
 
-timeout $RUNTIME valgrind --leak-check=full -v ./WordFrequency "$RELATIVE_PATH/"infile2.txt out2.txt > /dev/null 2> valgrind-out.txt
-valgrindTimeout=$?
-
-if [ ! $lextestspassed -eq 5 ]; then
-  exit 1
-fi
-if [ -f valgrind-out.txt ]; then
-  bytes=`perl -ane 'print $F[5] if $F[4] eq "exit:"' valgrind-out.txt`
-else
-  exit 2
-fi
-if [ $valgrindTimeout -eq 124 ] || [ ! $bytes -eq 0 ]; then
-  exit 2
-fi
-exit 0
+valgrindtestspassed=0
+for NUM in $(seq 1 $NUMTESTS); do
+  timeout $RUNTIME valgrind --leak-check=full -v ./WordFrequency "$RELATIVE_PATH/"infile$NUM.txt out$NUM.txt > /dev/null 2> valgrind-out$NUM.txt
+  if [ $? -eq 0 ] && [ -f valgrind-out$NUM.txt ]; then
+    bytes=`perl -ane 'print $F[5] if $F[4] eq "exit:"' valgrind-out$NUM.txt`
+    if [ $bytes -eq 0 ]; then
+      let valgrindtestspassed+=1
+    fi
+  fi
+done
+exit $(($wordstestspassed+$valgrindtestspassed))
