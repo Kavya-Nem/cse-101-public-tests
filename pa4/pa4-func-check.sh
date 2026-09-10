@@ -39,3 +39,4 @@ if [ $valgrindTimeout -eq 124 ] || [ ! $bytes -eq 0 ]; then
   exit 2
 fi
 
+exit 0
