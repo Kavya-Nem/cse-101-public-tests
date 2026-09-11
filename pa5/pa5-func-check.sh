@@ -29,4 +29,4 @@ for NUM in $(seq 1 $NUMTESTS); do
     fi
   fi
 done
-exit $(($lextestspassed+$valgrindtestspassed))
+exit $(((2*$NUMTESTS)-($lextestspassed+$valgrindtestspassed)))
