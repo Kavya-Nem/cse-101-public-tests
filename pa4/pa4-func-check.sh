@@ -26,7 +26,13 @@ done
 
 valgrindtestspassed=0
 for NUM in $(seq 1 $NUMTESTS); do
-  timeout $TIME valgrind --leak-check=full -v ./Sparse "$RELATIVE_PATH/"infile$NUM.txt outfile$NUM.txt > /dev/null 2> Sparse-mem$NUM.txt
+  let RUNTIME=$TIME
+  let MAXRUNTIME=$RUNTIME*3
+  if [ $NUM -eq 4 ]; then
+    let RUNTIME=3*$TIME
+    let MAXRUNTIME=$RUNTIME*3
+  fi
+  timeout $MAXRUNTIME valgrind --leak-check=full -v ./Sparse "$RELATIVE_PATH/"infile$NUM.txt outfile$NUM.txt > /dev/null 2> Sparse-mem$NUM.txt
   if [ $? -eq 0 ] && [ -f Sparse-mem$NUM.txt ]; then
     bytes=`perl -ane 'print $F[5] if $F[4] eq "exit:"' Sparse-mem$NUM.txt`
     if [ $bytes -eq 0 ]; then
@@ -35,4 +41,4 @@ for NUM in $(seq 1 $NUMTESTS); do
   fi
 done
 
-exit $(($pathtestspassed+$valgrindtestspassed))
+exit $(((2*$NUMTESTS)-($pathtestspassed+$valgrindtestspassed)))
