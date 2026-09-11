@@ -1,49 +1,36 @@
 #!/bin/bash
 RELATIVE_PATH="../cse-101-public-tests/pa8"
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-NC='\033[0m' # No Color
 
 NUMTESTS=3
-PNTSPERTEST=3
-MAXTIME=$((${1:-1}*10))
+RUNTIME=$((${1:-1}*10))
 let MAXPTS=$NUMTESTS*$PNTSPERTEST
-
-
-echo ""
-echo ""
 
 g++ -std=c++17 -Wall -c -g WordFrequency.cpp Dictionary.cpp
 g++ -std=c++17 -Wall -o WordFrequency WordFrequency.o Dictionary.o
 
-lextestspassed=$(expr 0)
-echo "WordFrequency tests: If nothing between '=' signs, then test is passed"
-echo "Press enter to continue"
-read verbose
+lextestspassed=0
 for NUM in $(seq 1 $NUMTESTS); do
-  rm -f WF-outfile$NUM.txt
-  echo "WordFrequency Test $NUM:"
-  timeout $MAXTIME /usr/bin/time -po WF-time$NUM.txt ./WordFrequency "$RELATIVE_PATH/"WF-infile$NUM.txt WF-outfile$NUM.txt
+  let MAXTIME=$RUNTIME*3
+  timeout $MAXTIME /usr/bin/time -o WF-time$NUM.txt -f "%U" ./WordFrequency "$RELATIVE_PATH/"WF-infile$NUM.txt WF-outfile$NUM.txt &> /dev/null
   t=$?
-  userTime=`perl -ane 'print $F[1] if $F[0] eq "user"' WF-time$NUM.txt`
-  tooSlow=$(echo "$userTime > $MAXTIME" |bc -l)
-  diff -bBwu --speed-large-files WF-outfile$NUM.txt "$RELATIVE_PATH/"Model-WF-outfile$NUM.txt &> WF-diff$NUM.txt >> WF-diff$NUM.txt
-  echo "=========="
-  cat WF-diff$NUM.txt
-  if [[ $tooSlow -eq 1 ]] || [[ $t -eq 124 ]]; then
-    echo -e "${RED}WORDS TEST TIMED OUT (Slower than $MAXTIME) ${NC}"
-  fi
-  echo "=========="
-  if [ -e WF-diff$NUM.txt ] && [[ ! -s WF-diff$NUM.txt ]] && [[ $tooSlow -eq 0 ]] && [[ ! $t -eq 124 ]]; then
+  userTime=$(cat time$NUM.txt)
+  tooSlow=$(echo "$userTime > $RUNTIME" |bc -l)
+  diff -bBwu --speed-large-files WF-outfile$NUM.txt "$RELATIVE_PATH/"Model-WF-outfile$NUM.txt &> WF-diff$NUM.txt
+  if [ -f WF-diff$NUM.txt ] && [[ ! -s WF-diff$NUM.txt ]] && [[ $tooSlow -eq 0 ]] && [[ $t -eq 0 ]]; then
     let lextestspassed+=1
   fi
 done
 
-let lextestpoints=${PNTSPERTEST}*lextestspassed
+valgrindtestspassed=0
+for NUM in $(seq 1 $NUMTESTS); do
+  let MAXTIME=$RUNTIME*3
+  timeout $MAXTIME valgrind --leak-check=full -v ./Words "$RELATIVE_PATH/"infile$NUM.txt outfile$NUM.txt > /dev/null 2> valgrind-out$NUM.txt
+  if [ $? -eq 0 ] && [ -f valgrind-out$NUM.txt ]; then
+    bytes=`perl -ane 'print $F[5] if $F[4] eq "exit:"' valgrind-out$NUM.txt`
+    if [ ${bytes//,/} -eq 0 ]; then
+      let valgrindtestspassed+=1
+    fi
+  fi
+done
 
-echo "Passed $lextestspassed / $NUMTESTS WordFrequency tests"
-echo "This gives a total of $lextestpoints / $MAXPTS points"
-echo ""
-echo ""
-
-rm -f *.o WordFrequency WF-diff*
+exit $(((2*$NUMTESTS)-($lextestspassed+$valgrindtestspassed)))
