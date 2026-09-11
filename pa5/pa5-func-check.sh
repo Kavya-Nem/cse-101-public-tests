@@ -25,7 +25,7 @@ for NUM in $(seq 1 $NUMTESTS); do
   timeout $MAXRUNTIME valgrind --leak-check=full -v ./WordFrequency "$RELATIVE_PATH/"infile$NUM.txt out$NUM.txt > /dev/null 2> valgrind-out$NUM.txt
   if [ $? -eq 0 ] && [ -f valgrind-out$NUM.txt ]; then
     bytes=`perl -ane 'print $F[5] if $F[4] eq "exit:"' valgrind-out$NUM.txt`
-    if [ $bytes -eq 0 ]; then
+    if [ ${bytes//,/} -eq 0 ]; then
       let valgrindtestspassed+=1
     fi
   fi
