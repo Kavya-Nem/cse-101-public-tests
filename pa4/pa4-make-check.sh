@@ -2,8 +2,9 @@
 rm -f *.o Sparse
 make
 
+makeexitcode=$?
 exitcode=0
-if [ ! -f Sparse ] || [ ! -x Sparse ]; then # exist and executable
+if [ ! $makeexitcode -eq 0 ] || [ ! -x Sparse ]; then # exist and executable
   ((exitcode++))
 fi
 
@@ -13,3 +14,4 @@ if [ -f Sparse ] || (($(compgen -G "*.o" | wc -l) > 0)); then
   ((exitcode++))
 fi
 exit $exitcode
+
