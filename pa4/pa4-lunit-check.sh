@@ -1,6 +1,7 @@
 #!/bin/bash
 RELATIVE_PATH="../cse-101-public-tests/pa4"
 
+rm -f List.o
 gcc -c -std=c17 -Wall -g "$RELATIVE_PATH/"ModelListTest.c List.c
 gcc -o ModelListTest ModelListTest.o List.o
 
