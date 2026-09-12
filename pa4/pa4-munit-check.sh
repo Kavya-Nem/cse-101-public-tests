@@ -2,6 +2,7 @@
 RELATIVE_PATH="../cse-101-public-tests/pa4"
 TIME=8
 
+rm -f Matrix.o List.o
 gcc -c -std=c17 -Wall -g "$RELATIVE_PATH/"ModelMatrixTest.c Matrix.c List.c
 gcc -o ModelMatrixTest ModelMatrixTest.o Matrix.o List.o
 
@@ -22,3 +23,4 @@ if [ $? -eq 0 ] && [ -f MatrixTest-mem.txt ]; then
 fi
 
 exit $((2-$testspassed))
+
