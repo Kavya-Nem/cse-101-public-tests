@@ -2,10 +2,8 @@
 RELATIVE_PATH="../cse-101-public-tests/pa4"
 NUMTESTS=5
 TIME=5
-
 gcc -c -Wall -std=c17 -g Sparse.c Matrix.c List.c
 gcc -o Sparse Sparse.o Matrix.o List.o
-
 pathtestspassed=0
 for NUM in $(seq 1 $NUMTESTS); do
   let RUNTIME=$TIME
