@@ -14,7 +14,7 @@ if [ ! $tooSlow -eq 1 ] && [ $t -eq 0 ]; then
   ((testspassed++))
 fi
 timeout 20 valgrind --leak-check=full -v ./ModelMatrixTest > /dev/null 2> MatrixTest-mem.txt
-if [ $? -eq 0 ] && [ -f MatrixTest-mem.txt ]; then
+if [ $? -eq 0 ]; then
   bytes=`perl -ane 'print $F[5] if $F[4] eq "exit:"' MatrixTest-mem.txt`
   if [ ${bytes//,/} -eq 0 ]; then
     ((testspassed++))
