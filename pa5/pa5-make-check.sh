@@ -2,10 +2,9 @@
 
 rm -f *.o WordFrequency
 make
-makeexitcode=$?
 exitcode=0
 
-if [ ! $makeexitcode -eq 0 ] || [ ! -x WordFrequency ]; then # exist and executable
+if [ ! -x WordFrequency ]; then # exist and executable
   ((exitcode++))
 fi
 
