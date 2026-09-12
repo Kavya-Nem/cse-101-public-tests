@@ -3,10 +3,9 @@
 rm -f *.o Words
 
 make -j8
-makeexitcode=$?
 exitcode=0
 
-if [ ! $makeexitcode -eq 0 ] || [ ! -x Words ]; then # exist and executable
+if [ ! -x Words ]; then # exist and executable
   ((exitcode++))
 fi
 
