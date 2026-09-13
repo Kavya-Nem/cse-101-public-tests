@@ -9,8 +9,6 @@
 #include "../../pa4/List.h"
 
 #define FIRST_TEST Empty_length
-#define MAXSCORE 10
-#define CHARITY 0
 
 #define RED "\033[0;31m"
 #define CYAN "\033[0;36m"
@@ -508,7 +506,6 @@ int main(int argc, char **argv) {
     exit(1);
   }
 
-  printf("\n"); // more spacing
   if (argc == 2)
     printf("\n"); // consistency in verbose mode
 
@@ -516,10 +513,6 @@ int main(int argc, char **argv) {
   disable_exit_handler = 0;
   atexit(exit_attempt_handler);
   signal(SIGSEGV, segfault_handler);
-  // signal(SIGTERM, abrupt_termination_handler); // dangerous
-  // signal(SIGINT, abrupt_termination_handler);
-  // signal(SIGFPE, abrupt_termination_handler);
-  // signal(SIGABRT, abrupt_termination_handler);
   for (uint8_t i = FIRST_TEST; i < NUM_TESTS; i++) {
     List A = newList();
     testStatus = runTest(&A, i);
@@ -548,17 +541,8 @@ int main(int argc, char **argv) {
 
   disable_exit_handler = 1;
 
-  uint8_t totalScore = (MAXSCORE - NUM_TESTS / 3) + testsPassed / 3;
-
   if (argc == 2 && testStatus != 255)
     printf("\nYou passed %d out of %d tests\n", testsPassed, NUM_TESTS);
-  else if (testStatus == 255) {
-    totalScore = CHARITY; // charity points
-    if (argc == 2)
-      printf(RED "Receiving charity points because your program crashes\n" NC);
   }
-  printf("\nYou will receive %d out of %d possible points on the ListTests\n\n",
-         totalScore, MAXSCORE);
-  exit(0);
-  return 0;
+  exit(testsPassed);
 }
