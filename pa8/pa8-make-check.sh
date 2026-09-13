@@ -3,7 +3,7 @@ rm -f Words WordFrequency *.o
 make WordFrequency
 make Words
 exitcode=0
-if [ ! -x Words ] || [ ! -x WordFrequency ]; then # exist and executable
+if [ ! -x Words ] || [ ! -x WordFrequency ] || (($(compgen -G "*.o" | wc -l) == 0)); then # exist and executable
   ((exitcode++))
 fi
 
