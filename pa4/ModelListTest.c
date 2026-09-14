@@ -5,21 +5,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
 #include "../../pa4/List.h"
-
 #define FIRST_TEST Empty_length
-
 #define RED "\033[0;31m"
 #define CYAN "\033[0;36m"
 #define GREEN "\033[0;32m"
 #define NC "\033[0m"
-
 static uint8_t testsPassed;
 static volatile sig_atomic_t testStatus;
 static uint8_t disable_exit_handler;
 jmp_buf test_crash;
-
 enum Test_e {
   Empty_length = 0,
   Append_length,
@@ -29,7 +24,6 @@ enum Test_e {
   DeleteFront_length,
   DeleteBack_length,
   Delete_length,
-
   EmptyList_position,
   MoveFront_position,
   MoveBack_position,
@@ -42,19 +36,15 @@ enum Test_e {
   DeleteFront_position,
   DeleteBack_position,
   Delete_position,
-
   Empty_clear,
   NonEmpty_clear,
-
   Set_get,
   Set_front,
   NonEmpty_front,
   Set_back,
   NonEmpty_back,
-
   NUM_TESTS,
 };
-
 char *testName(int test) {
   if (test == Empty_length)
     return "Empty_length";
@@ -72,7 +62,6 @@ char *testName(int test) {
     return "DeleteBack_length";
   if (test == Delete_length)
     return "Delete_length";
-
   if (test == EmptyList_position)
     return "EmptyList_position";
   if (test == MoveFront_position)
@@ -97,12 +86,10 @@ char *testName(int test) {
     return "DeleteBack_position";
   if (test == Delete_position)
     return "Delete_position";
-
   if (test == Empty_clear)
     return "Empty_clear";
   if (test == NonEmpty_clear)
     return "NonEmpty_clear";
-
   if (test == Set_get)
     return "Set_get";
   if (test == Set_front)
@@ -113,19 +100,15 @@ char *testName(int test) {
     return "Set_back";
   if (test == NonEmpty_back)
     return "NonEmpty_back";
-
   return "";
 }
-
 int *newData(int data) {
   int *N = malloc(sizeof(int));
   *N = data;
   return N;
 }
-
 uint8_t runTest(List *pA, int test) {
   List A = *pA;
-
   switch (test) {
   case Empty_length: {
     if (length(A) != 0)
@@ -482,33 +465,27 @@ uint8_t runTest(List *pA, int test) {
   }
   return 255;
 }
-
 void segfault_handler(int signal) { // everyone knows what this is
   testStatus = 255;
   longjmp(test_crash, 1);
 }
-
 void exit_attempt_handler(void) { // only I decide when you are done
   if (disable_exit_handler)
     return; // allow this to be disabled
   testStatus = 255;
   longjmp(test_crash, 2);
 }
-
 void abrupt_termination_handler(int signal) { // program killed externally
   testStatus = 255;
   longjmp(test_crash, 3);
 }
-
 int main(int argc, char **argv) {
   if (argc > 2 || (argc == 2 && strcmp(argv[1], "-v") != 0)) {
     printf("Usage: %s [-v]", (argc > 0 ? argv[0] : "./ListTest"));
     exit(1);
   }
-
   if (argc == 2)
     printf("\n"); // consistency in verbose mode
-
   testsPassed = 0;
   disable_exit_handler = 0;
   atexit(exit_attempt_handler);
@@ -538,11 +515,8 @@ int main(int argc, char **argv) {
       testsPassed++;
     }
   }
-
   disable_exit_handler = 1;
-
   if (argc == 2 && testStatus != 255)
-    printf("\nYou passed %d out of %d tests\n", testsPassed, NUM_TESTS);
-  }
-  exit(testsPassed);
+    printf("\nYou passed %d out of %d tests\n", testsPassed, NUM_TESTS); 
+  exit(NUM_TESTS - testsPassed);
 }
