@@ -2,9 +2,13 @@
 RELATIVE_PATH="../cse-101-public-tests/pa4"
 NUMTESTS=5
 TIME=5
-gcc -c -Wall -std=c17 -g Sparse.c Matrix.c List.c
-gcc -o Sparse Sparse.o Matrix.o List.o
 pathtestspassed=0
+if gcc -c -Wall -std=c17 -g Sparse.c Matrix.c List.c; then
+  ((pathtestspassed++))
+fi
+if gcc -o Sparse Sparse.o Matrix.o List.o; then
+  ((pathtestspassed++))
+fi
 for NUM in $(seq 1 $NUMTESTS); do
   let RUNTIME=$TIME
   let MAXRUNTIME=$RUNTIME*3
@@ -21,7 +25,6 @@ for NUM in $(seq 1 $NUMTESTS); do
     let pathtestspassed+=1
   fi
 done
-
 valgrindtestspassed=0
 for NUM in $(seq 1 $NUMTESTS); do
   let RUNTIME=$TIME
@@ -36,4 +39,4 @@ for NUM in $(seq 1 $NUMTESTS); do
   fi
 done
 
-exit $(((2*$NUMTESTS)-($pathtestspassed+$valgrindtestspassed)))
+exit $(((2*$NUMTESTS+2)-($pathtestspassed+$valgrindtestspassed)))
