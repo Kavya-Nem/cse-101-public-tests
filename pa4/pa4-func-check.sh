@@ -18,10 +18,10 @@ for NUM in $(seq 1 $NUMTESTS); do
   fi
   timeout $MAXRUNTIME /usr/bin/time -o time$NUM.txt -f "%U" ./Sparse "$RELATIVE_PATH/"infile$NUM.txt outfile$NUM.txt &> /dev/null
   t=$?
-  userTime=$(cat time$NUM.txt)
+  userTime=$(cat time$NUM.txt || echo $((RUNTIME+1)))
   tooSlow=$(echo "$userTime > $RUNTIME" |bc -l)
   diff -bBwu outfile$NUM.txt "$RELATIVE_PATH/"model-outfile$NUM.txt &> diff$NUM.txt
-  if [ ! -s "diff$NUM.txt" ] && [ ! $tooSlow -eq 1 ] && [ $t -eq 0 ]; then
+  if [ -f "diff$NUM.txt" ] && [ ! -s "diff$NUM.txt" ] && [ $tooSlow -eq 0 ] && [ $t -eq 0 ]; then
     let pathtestspassed+=1
   fi
 done
