@@ -12,8 +12,6 @@
 #include "../../pa5/Dictionary.h"
 
 #define FIRST_TEST Empty_diagnostic
-#define MAXSCORE 60
-#define CHARITY 10
 
 #define RED "\033[0;31m"
 #define CYAN "\033[0;36m"
@@ -453,4 +451,423 @@ int main(int argc, char **argv) {
   }
   printf("\nYou will receive %d out of %d possible points on the DictionaryTest\n\n", totalScore, MAXSCORE);
   return 0;
+}
+
+int *newData(int data) {
+  int *N = malloc(sizeof(int));
+  *N = data;
+  return N;
+}
+uint8_t runTest(List *pA, int test) {
+  List A = *pA;
+  switch (test) {
+  case Empty_length: {
+    if (length(A) != 0)
+      return 1;
+    return 0;
+  }
+  case Append_length: {
+    append(A, newData(1));
+    append(A, newData(2));
+    append(A, newData(3));
+    append(A, newData(5));
+    if (length(A) != 4)
+      return 1;
+    return 0;
+  }
+  case Prepend_length: {
+    prepend(A, newData(6));
+    prepend(A, newData(4));
+    prepend(A, newData(2));
+    prepend(A, newData(1));
+    if (length(A) != 4)
+      return 1;
+    return 0;
+  }
+  case InsertAfter_length: {
+    append(A, newData(1));
+    append(A, newData(2));
+    append(A, newData(3));
+    append(A, newData(5));
+    moveFront(A);
+    insertAfter(A, newData(12));
+    if (length(A) != 5)
+      return 1;
+    return 0;
+  }
+  case InsertBefore_length: {
+    prepend(A, newData(76));
+    prepend(A, newData(4));
+    prepend(A, newData(3));
+    prepend(A, newData(1));
+    moveFront(A);
+    insertBefore(A, newData(100));
+    if (length(A) != 5)
+      return 1;
+    return 0;
+  }
+  case DeleteFront_length: {
+    prepend(A, newData(76));
+    prepend(A, newData(4));
+    deleteFront(A);
+    prepend(A, newData(3));
+    prepend(A, newData(1));
+    moveFront(A);
+    insertBefore(A, newData(115));
+    deleteFront(A);
+    if (length(A) != 3)
+      return 1;
+    return 0;
+  }
+  case DeleteBack_length: {
+    append(A, newData(1));
+    deleteBack(A);
+    append(A, newData(2));
+    append(A, newData(3));
+    append(A, newData(5));
+    moveFront(A);
+    insertAfter(A, newData(12));
+    deleteBack(A);
+    if (length(A) != 3)
+      return 1;
+    return 0;
+  }
+  case Delete_length: {
+    append(A, newData(1));
+    append(A, newData(2));
+    moveFront(A);
+    delete (A);
+    append(A, newData(3));
+    append(A, newData(5));
+    moveFront(A);
+    insertAfter(A, newData(12));
+    delete (A);
+    if (length(A) != 3)
+      return 1;
+    return 0;
+  }
+  case EmptyList_position: {
+    if (position(A) != -1)
+      return 1;
+    return 0;
+  }
+  case MoveFront_position: {
+    append(A, newData(1));
+    append(A, newData(5));
+    append(A, newData(16));
+    append(A, newData(176));
+    append(A, newData(3214));
+    moveFront(A);
+    if (position(A) != 0)
+      return 1;
+    return 0;
+  }
+  case MoveBack_position: {
+    append(A, newData(1));
+    append(A, newData(5));
+    append(A, newData(16));
+    append(A, newData(176));
+    append(A, newData(3214));
+    moveBack(A);
+    if (position(A) != 4)
+      return 1;
+    return 0;
+  }
+  case MoveNext_position: {
+    append(A, newData(1));
+    append(A, newData(5));
+    append(A, newData(16));
+    append(A, newData(176));
+    append(A, newData(3214));
+    moveFront(A);
+    moveNext(A);
+    moveNext(A);
+    if (position(A) != 2)
+      return 1;
+    moveNext(A);
+    moveNext(A);
+    moveNext(A);
+    if (position(A) != -1)
+      return 2;
+    return 0;
+  }
+  case MovePrev_position: {
+    append(A, newData(1));
+    append(A, newData(5));
+    append(A, newData(3214));
+    moveBack(A);
+    movePrev(A);
+    if (position(A) != 1)
+      return 1;
+    movePrev(A);
+    movePrev(A);
+    if (position(A) != -1)
+      return 2;
+    return 0;
+  }
+  case Append_position: {
+    append(A, newData(1));
+    append(A, newData(5));
+    append(A, newData(7));
+    moveBack(A);
+    append(A, newData(45));
+    append(A, newData(51));
+    append(A, newData(3214));
+    if (position(A) != 2)
+      return 1;
+    moveBack(A);
+    movePrev(A);
+    movePrev(A);
+    if (position(A) != 3)
+      return 2;
+    moveFront(A);
+    movePrev(A);
+    if (position(A) != -1)
+      return 3;
+    return 0;
+  }
+  case Prepend_position: {
+    prepend(A, newData(1));
+    prepend(A, newData(5));
+    prepend(A, newData(7));
+    moveFront(A);
+    prepend(A, newData(45));
+    prepend(A, newData(51));
+    prepend(A, newData(3214));
+    prepend(A, newData(314));
+    prepend(A, newData(324));
+    if (position(A) != 5)
+      return 1;
+    moveBack(A);
+    movePrev(A);
+    prepend(A, newData(234));
+    movePrev(A);
+    if (position(A) != 6)
+      return 2;
+    moveFront(A);
+    movePrev(A);
+    if (position(A) != -1)
+      return 3;
+    return 0;
+  }
+  case InsertAfter_position: {
+    append(A, newData(5));
+    append(A, newData(6));
+    append(A, newData(4));
+    append(A, newData(33));
+    append(A, newData(2));
+    append(A, newData(1));
+    moveBack(A);
+    insertAfter(A, newData(75));
+    moveNext(A);
+    if (position(A) != 6)
+      return 1;
+    insertAfter(A, newData(345));
+    moveBack(A);
+    if (position(A) != 7)
+      return 2;
+    return 0;
+  }
+  case InsertBefore_position: {
+    prepend(A, newData(34));
+    prepend(A, newData(4));
+    prepend(A, newData(354));
+    prepend(A, newData(3674));
+    moveBack(A);
+    insertBefore(A, newData(435));
+    if (position(A) != 4)
+      return 1;
+    prepend(A, newData(324));
+    prepend(A, newData(33464));
+    prepend(A, newData(3498));
+    moveFront(A);
+    insertBefore(A, newData(67));
+    if (position(A) != 1)
+      return 2;
+    return 0;
+  }
+  case DeleteFront_position: {
+    prepend(A, newData(5));
+    prepend(A, newData(65));
+    prepend(A, newData(43));
+    prepend(A, newData(2));
+    prepend(A, newData(8));
+    prepend(A, newData(1));
+    moveFront(A);
+    deleteFront(A);
+    if (position(A) != -1)
+      return 1;
+    moveBack(A);
+    deleteFront(A);
+    if (position(A) != 3)
+      return 2;
+    return 0;
+  }
+  case DeleteBack_position: {
+    prepend(A, newData(5));
+    prepend(A, newData(65));
+    prepend(A, newData(43));
+    prepend(A, newData(2));
+    prepend(A, newData(8));
+    prepend(A, newData(1));
+    moveBack(A);
+    deleteBack(A);
+    if (position(A) != -1)
+      return 1;
+    moveFront(A);
+    deleteBack(A);
+    moveNext(A);
+    if (position(A) != 1)
+      return 2;
+    return 0;
+  }
+  case Delete_position: {
+    prepend(A, newData(5));
+    prepend(A, newData(65));
+    prepend(A, newData(43));
+    moveBack(A);
+    delete (A);
+    if (position(A) != -1)
+      return 1;
+    prepend(A, newData(2));
+    prepend(A, newData(8));
+    prepend(A, newData(1));
+    moveBack(A);
+    if (position(A) != 4)
+      return 2;
+    delete (A);
+    moveBack(A);
+    if (position(A) != 3)
+      return 3;
+    moveFront(A);
+    delete (A);
+    moveFront(A);
+    if (position(A) != 0)
+      return 4;
+    delete (A);
+    if (position(A) != -1)
+      return 5;
+    return 0;
+  }
+  case Empty_clear: {
+    clear(A);
+    if (position(A) != -1 || length(A) != 0)
+      return 1;
+    return 0;
+  }
+  case NonEmpty_clear: {
+    append(A, newData(1));
+    prepend(A, newData(2));
+    moveFront(A);
+    clear(A);
+    if (position(A) != -1 || length(A) != 0)
+      return 1;
+    return 0;
+  }
+  case Set_get: {
+    append(A, newData(1));
+    prepend(A, newData(2));
+    deleteFront(A);
+    moveBack(A);
+    if (*(int *)get(A) != 1)
+      return 1;
+    return 0;
+  }
+  case Set_front: {
+    append(A, newData(1));
+    prepend(A, newData(5));
+    moveBack(A);
+    if (*(int *)front(A) != 5)
+      return 1;
+    return 0;
+  }
+  case NonEmpty_front: {
+    prepend(A, newData(5));
+    append(A, newData(7));
+    prepend(A, newData(2));
+    moveFront(A);
+    insertBefore(A, newData(43));
+    deleteFront(A);
+    delete (A);
+    if (*(int *)front(A) != 5)
+      return 1;
+    return 0;
+  }
+  case Set_back: {
+    prepend(A, newData(1));
+    append(A, newData(5));
+    moveFront(A);
+    if (*(int *)back(A) != 5)
+      return 1;
+    return 0;
+  }
+  case NonEmpty_back: {
+    append(A, newData(5));
+    prepend(A, newData(7));
+    append(A, newData(2));
+    moveBack(A);
+    insertAfter(A, newData(43));
+    deleteBack(A);
+    delete (A);
+    if (*(int *)back(A) != 5)
+      return 1;
+    return 0;
+  }
+  }
+  return 255;
+}
+void segfault_handler(int signal) { // everyone knows what this is
+  testStatus = 255;
+  longjmp(test_crash, 1);
+}
+void exit_attempt_handler(void) { // only I decide when you are done
+  if (disable_exit_handler)
+    return; // allow this to be disabled
+  testStatus = 255;
+  longjmp(test_crash, 2);
+}
+void abrupt_termination_handler(int signal) { // program killed externally
+  testStatus = 255;
+  longjmp(test_crash, 3);
+}
+int main(int argc, char **argv) {
+  if (argc > 2 || (argc == 2 && strcmp(argv[1], "-v") != 0)) {
+    printf("Usage: %s [-v]", (argc > 0 ? argv[0] : "./ListTest"));
+    exit(1);
+  }
+  if (argc == 2)
+    printf("\n"); // consistency in verbose mode
+  testsPassed = 0;
+  disable_exit_handler = 0;
+  atexit(exit_attempt_handler);
+  signal(SIGSEGV, segfault_handler);
+  for (uint8_t i = FIRST_TEST; i < NUM_TESTS; i++) {
+    List A = newList();
+    testStatus = runTest(&A, i);
+    freeList(&A);
+    uint8_t fail_type = setjmp(test_crash);
+    if (argc == 2) { // it's verbose mode
+      printf("Test %s: %s", testName(i),
+             testStatus == 0 ? GREEN "PASSED" NC : RED "FAILED" NC);
+      if (testStatus == 255) {
+        printf(": due to a " RED "%s" NC "\n", fail_type == 1 ? "segfault"
+                                               : fail_type == 2
+                                                   ? "program exit"
+                                                   : "program interruption");
+        printf(RED "\nWARNING: Program will now stop running tests\n\n" NC);
+        break;
+      } else if (testStatus != 0) {
+        printf(": test" CYAN " %d\n" NC, testStatus);
+      } else {
+        printf("\n");
+      }
+    }
+    if (testStatus == 0) {
+      testsPassed++;
+    }
+  }
+  disable_exit_handler = 1;
+  if (argc == 2 && testStatus != 255)
+    printf("\nYou passed %d out of %d tests\n", testsPassed, NUM_TESTS); 
+  exit(NUM_TESTS - testsPassed);
 }
