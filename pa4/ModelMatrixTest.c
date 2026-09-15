@@ -338,12 +338,12 @@ uint8_t runTest(Matrix *pA, Matrix *pB, Matrix *pC, Matrix *pD, int test) {
   return 254;
 }
 
-void segfault_handler(int signal) { // everyone knows what this is
+void segfault_handler(int signal) {
   testStatus = 255;
   longjmp(test_crash, 1);
 }
 
-void exit_attempt_handler(void) { // only I decide when you are done
+void exit_attempt_handler(void) {
   if (disable_exit_handler)
     return; // allow this to be disabled
   testStatus = 255;
@@ -355,13 +355,34 @@ void abrupt_termination_handler(int signal) { // program killed externally
   longjmp(test_crash, 3);
 }
 
+        printf(": due to a " RED "%s" NC "\n", fail_type == 1 ? "segfault"
+                                               : fail_type == 2
+                                                   ? "program exit"
+                                                   : "program interruption");
+        printf(RED "\nWARNING: Program will now stop running tests\n\n" NC);
+        break;
+      } else if (testStatus != 0) {
+        printf(": test" CYAN " %d\n" NC, testStatus);
+      } else {
+        printf("\n");
+      }
+    }
+    if (testStatus == 0) {
+      testsPassed++;
+    }
+  }
+  disable_exit_handler = 1;
+  if (argc == 2 && testStatus != 255)
+    printf("\nYou passed %d out of %d tests\n", testsPassed, NUM_TESTS); 
+  exit(NUM_TESTS - testsPassed);
+}
+
 int main(int argc, char **argv) {
   if (argc > 2 || (argc == 2 && strcmp(argv[1], "-v") != 0)) {
     printf("Usage: %s [-v]", (argc > 0 ? argv[0] : "./GraphTest"));
     exit(1);
   }
 
-  printf("\n"); // more spacing
   if (argc == 2)
     printf("\n"); // consistency in verbose mode
 
@@ -426,60 +447,4 @@ int main(int argc, char **argv) {
       totalScore, MAXSCORE);
 
   return 0;
-}
-
-void segfault_handler(int signal) { // everyone knows what this is
-  testStatus = 255;
-  longjmp(test_crash, 1);
-}
-void exit_attempt_handler(void) { // only I decide when you are done
-  if (disable_exit_handler)
-    return; // allow this to be disabled
-  testStatus = 255;
-  longjmp(test_crash, 2);
-}
-void abrupt_termination_handler(int signal) { // program killed externally
-  testStatus = 255;
-  longjmp(test_crash, 3);
-}
-int main(int argc, char **argv) {
-  if (argc > 2 || (argc == 2 && strcmp(argv[1], "-v") != 0)) {
-    printf("Usage: %s [-v]", (argc > 0 ? argv[0] : "./ListTest"));
-    exit(1);
-  }
-  if (argc == 2)
-    printf("\n"); // consistency in verbose mode
-  testsPassed = 0;
-  disable_exit_handler = 0;
-  atexit(exit_attempt_handler);
-  signal(SIGSEGV, segfault_handler);
-  for (uint8_t i = FIRST_TEST; i < NUM_TESTS; i++) {
-    List A = newList();
-    testStatus = runTest(&A, i);
-    freeList(&A);
-    uint8_t fail_type = setjmp(test_crash);
-    if (argc == 2) { // it's verbose mode
-      printf("Test %s: %s", testName(i),
-             testStatus == 0 ? GREEN "PASSED" NC : RED "FAILED" NC);
-      if (testStatus == 255) {
-        printf(": due to a " RED "%s" NC "\n", fail_type == 1 ? "segfault"
-                                               : fail_type == 2
-                                                   ? "program exit"
-                                                   : "program interruption");
-        printf(RED "\nWARNING: Program will now stop running tests\n\n" NC);
-        break;
-      } else if (testStatus != 0) {
-        printf(": test" CYAN " %d\n" NC, testStatus);
-      } else {
-        printf("\n");
-      }
-    }
-    if (testStatus == 0) {
-      testsPassed++;
-    }
-  }
-  disable_exit_handler = 1;
-  if (argc == 2 && testStatus != 255)
-    printf("\nYou passed %d out of %d tests\n", testsPassed, NUM_TESTS); 
-  exit(NUM_TESTS - testsPassed);
 }
