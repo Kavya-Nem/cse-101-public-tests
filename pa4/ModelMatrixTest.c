@@ -9,6 +9,7 @@
 #include "../../pa4/Matrix.h"
 #define FIRST_TEST Empty_getDimension
 #define RED "\033[0;31m"
+#define CYAN "\033[0;36m"
 #define GREEN "\033[0;32m"
 #define NC "\033[0m"
 static uint8_t testsPassed;
@@ -385,6 +386,5 @@ int main(int argc, char **argv) {
   if (argc == 2 && testStatus == 255) {
     printf("\nYou passed %d out of %d tests\n", testsPassed, NUM_TESTS);
   }
-
   exit(NUM_TESTS - testspassed);
 }
