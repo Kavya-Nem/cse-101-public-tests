@@ -383,8 +383,8 @@ int main(int argc, char **argv) {
     }
   }
   disable_exit_handler = 1;
-  if (argc == 2 && testStatus == 255) {
+  if (argc == 2 && testStatus != 255) {
     printf("\nYou passed %d out of %d tests\n", testsPassed, NUM_TESTS);
   }
-  exit(NUM_TESTS - testspassed);
+  exit(NUM_TESTS - testsPassed);
 }
