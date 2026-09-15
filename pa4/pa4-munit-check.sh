@@ -11,7 +11,7 @@ if gcc -o ModelMatrixTest ModelMatrixTest.o Matrix.o List.o; then
 fi
 timeout 20 /usr/bin/time -o time.txt -f "%U" ./ModelMatrixTest -v > MatrixTest-out.txt 2> /dev/null
 t=$?
-userTime=$(cat time.txt)
+userTime=$(cat time.txt || echo $((TIME+1)))
 tooSlow=$(echo "$userTime > $TIME" |bc -l)
 if [ $tooSlow -eq 0 ] && [ $t -eq 0 ]; then
   ((testspassed++))
