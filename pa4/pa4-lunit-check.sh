@@ -10,7 +10,7 @@ if gcc -o ModelListTest ModelListTest.o List.o; then
 fi
 timeout 15 /usr/bin/time -o listtime.txt -f "%U" ./ModelListTest -v > ListTest-out.txt 2> /dev/null
 t=$?
-userTime=$(cat listtime.txt)
+userTime=$(cat listtime.txt || echo 6)
 tooSlow=$(echo "$userTime > 5" |bc -l)
 if [ $tooSlow -eq 0 ] && [ $t -eq 0 ]; then
   ((testspassed++))
@@ -20,3 +20,4 @@ if [ $? -eq 0 ]; then
   ((testspassed++))
 fi
 exit $((4-$testspassed))
+
