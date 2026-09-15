@@ -5,25 +5,19 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
 #include "../../pa4/List.h"
 #include "../../pa4/Matrix.h"
-
 #define FIRST_TEST Empty_getDimension
-
 #define RED "\033[0;31m"
 #define GREEN "\033[0;32m"
 #define NC "\033[0m"
-
 static uint8_t testsPassed;
 static volatile sig_atomic_t testStatus;
 static uint8_t disable_exit_handler;
 jmp_buf test_crash;
-
 enum Test_e {
   Empty_getDimension = 0,
   NonEmpty_getDimension,
-
   Empty_getnumNonZero,
   MakeZero_getnumNonZero,
   ChangeEntry_getnumNonZero,
@@ -33,19 +27,15 @@ enum Test_e {
   Diff_getnumNonZero,
   ScalarMult_getnumNonZero,
   Product_getnumNonZero,
-
   Empty_equals,
   NonEmpty_equals,
-
   NUM_TESTS,
 };
-
 char *testName(int test) {
   if (test == Empty_getDimension)
     return "Empty_getDimension";
   if (test == NonEmpty_getDimension)
     return "NonEmpty_getDimension";
-
   if (test == Empty_getnumNonZero)
     return "Empty_getnumNonZero";
   if (test == MakeZero_getnumNonZero)
@@ -64,20 +54,16 @@ char *testName(int test) {
     return "ScalarMult_getnumNonZero";
   if (test == Product_getnumNonZero)
     return "Product_getnumNonZero";
-
   if (test == Empty_equals)
     return "Empty_equals";
   if (test == NonEmpty_equals)
     return "NonEmpty_equals";
-
   return "";
 }
-
 // return 0 if pass otherwise the number of the test that was failed
 uint8_t runTest(Matrix *pA, Matrix *pB, Matrix *pC, Matrix *pD, int test) {
   Matrix A = *pA;
   Matrix B = *pB;
-
   switch (test) {
   case Empty_getDimension: {
     if (dimension(A) != 10)
@@ -296,7 +282,6 @@ uint8_t runTest(Matrix *pA, Matrix *pB, Matrix *pC, Matrix *pD, int test) {
     changeEntry(B, 10, 10, 10);
     if (!equals(A, B))
       return 4;
-
     freeMatrix(pA);
     freeMatrix(pB);
     A = *pA = newMatrix(100);
@@ -315,7 +300,6 @@ uint8_t runTest(Matrix *pA, Matrix *pB, Matrix *pC, Matrix *pD, int test) {
     *pD = sum(A, A);
     if (!equals(*pC, *pD))
       return 5;
-
     freeMatrix(pC);
     freeMatrix(pD);
     *pC = scalarMult(-2, A);
@@ -326,71 +310,40 @@ uint8_t runTest(Matrix *pA, Matrix *pB, Matrix *pC, Matrix *pD, int test) {
     freeMatrix(&As2);
     if (!equals(*pC, *pD))
       return 6;
-
     freeMatrix(pC);
     *pC = product(A, B);
     if (!equals(*pC, A))
       return 7;
-
     return 0;
   }
   }
   return 254;
 }
-
 void segfault_handler(int signal) {
   testStatus = 255;
   longjmp(test_crash, 1);
 }
-
 void exit_attempt_handler(void) {
   if (disable_exit_handler)
     return; // allow this to be disabled
   testStatus = 255;
   longjmp(test_crash, 2);
 }
-
 void abrupt_termination_handler(int signal) { // program killed externally
   testStatus = 255;
   longjmp(test_crash, 3);
 }
-
-        printf(": due to a " RED "%s" NC "\n", fail_type == 1 ? "segfault"
-                                               : fail_type == 2
-                                                   ? "program exit"
-                                                   : "program interruption");
-        printf(RED "\nWARNING: Program will now stop running tests\n\n" NC);
-        break;
-      } else if (testStatus != 0) {
-        printf(": test" CYAN " %d\n" NC, testStatus);
-      } else {
-        printf("\n");
-      }
-    }
-    if (testStatus == 0) {
-      testsPassed++;
-    }
-  }
-  disable_exit_handler = 1;
-  if (argc == 2 && testStatus != 255)
-    printf("\nYou passed %d out of %d tests\n", testsPassed, NUM_TESTS); 
-  exit(NUM_TESTS - testsPassed);
-}
-
 int main(int argc, char **argv) {
   if (argc > 2 || (argc == 2 && strcmp(argv[1], "-v") != 0)) {
     printf("Usage: %s [-v]", (argc > 0 ? argv[0] : "./GraphTest"));
     exit(1);
   }
-
   if (argc == 2)
     printf("\n"); // consistency in verbose mode
-
   testsPassed = 0;
   disable_exit_handler = 0;
   atexit(exit_attempt_handler);
   signal(SIGSEGV, segfault_handler);
-
   for (uint8_t i = FIRST_TEST; i < NUM_TESTS; i++) {
     Matrix A = newMatrix(10);
     Matrix B = newMatrix(10);
@@ -416,7 +369,6 @@ int main(int argc, char **argv) {
                                                    : "program interruption");
         printf(RED "\nWARNING: Program will now stop running tests\n\n" NC);
         break;
-
       } else if (testStatus == 254) {
         printf(": undefined test\n");
       } else if (testStatus != 0) {
@@ -429,22 +381,10 @@ int main(int argc, char **argv) {
       testsPassed++;
     }
   }
-
   disable_exit_handler = 1;
-
-  uint8_t totalScore = (MAXSCORE - NUM_TESTS * 4) + testsPassed * 4;
-
-  if (argc == 2) {
-    if (testStatus == 255) {
-      totalScore = CHARITY;
-      printf(RED "Receiving charity points because your program crashes\n" NC);
-    } else {
-      printf("\nYou passed %d out of %d tests\n", testsPassed, NUM_TESTS);
-    }
+  if (argc == 2 && testStatus == 255) {
+    printf("\nYou passed %d out of %d tests\n", testsPassed, NUM_TESTS);
   }
-  printf(
-      "\nYou will receive %d out of %d possible points on the MatrixTest\n\n",
-      totalScore, MAXSCORE);
 
-  return 0;
+  exit(NUM_TESTS - testspassed);
 }
