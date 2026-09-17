@@ -86,42 +86,6 @@ bool expectDiagnostic(Dictionary D, const char *expected) {
   return matches;
 }
 
-  }
-  case Append_length: {
-    append(A, newData(1));
-    append(A, newData(2));
-    append(A, newData(3));
-    append(A, newData(5));
-    if (length(A) != 4)
-      return 1;
-    return 0;
-  }
-  case Prepend_length: {
-    prepend(A, newData(6));
-    prepend(A, newData(4));
-    prepend(A, newData(2));
-    prepend(A, newData(1));
-    if (length(A) != 4)
-      return 1;
-    return 0;
-  }
-  case InsertAfter_length: {
-    append(A, newData(1));
-    append(A, newData(2));
-    append(A, newData(3));
-    append(A, newData(5));
-    moveFront(A);
-    insertAfter(A, newData(12));
-    if (length(A) != 5)
-      return 1;
-    return 0;
-  }
-  case InsertBefore_length: {
-    prepend(A, newData(76));
-    prepend(A, newData(4));
-    prepend(A, newData(3));
-    prepend(A, newData(1));
-    moveFront(A);
     insertBefore(A, newData(100));
     if (length(A) != 5)
       return 1;
@@ -470,7 +434,7 @@ uint8_t runTest(int test) {
     setValue(A, big, 777);
     if (!expectValue(A, big, 777)) rc = 2;
 
-    char tmp[8]; 
+    char tmp[8];
     strcpy(tmp, "dup");
     setValue(A, tmp, 7);
     if (size(A) != 3 || !expectValue(A, "dup", 7)) rc = 3;
