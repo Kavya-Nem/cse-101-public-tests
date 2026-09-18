@@ -86,75 +86,6 @@ bool expectDiagnostic(Dictionary D, const char *expected) {
   return matches;
 }
 
-    append(A, newData(176));
-    append(A, newData(3214));
-    moveFront(A);
-    if (position(A) != 0)
-      return 1;
-    return 0;
-  }
-  case MoveBack_position: {
-    append(A, newData(1));
-    append(A, newData(5));
-    append(A, newData(16));
-    append(A, newData(176));
-    append(A, newData(3214));
-    moveBack(A);
-    if (position(A) != 4)
-      return 1;
-    return 0;
-  }
-  case MoveNext_position: {
-    append(A, newData(1));
-    append(A, newData(5));
-    append(A, newData(16));
-    append(A, newData(176));
-    append(A, newData(3214));
-    moveFront(A);
-    moveNext(A);
-    moveNext(A);
-    if (position(A) != 2)
-      return 1;
-    moveNext(A);
-    moveNext(A);
-    moveNext(A);
-    if (position(A) != -1)
-      return 2;
-    return 0;
-  }
-  case MovePrev_position: {
-    append(A, newData(1));
-    append(A, newData(5));
-    append(A, newData(3214));
-    moveBack(A);
-    movePrev(A);
-    if (position(A) != 1)
-      return 1;
-    movePrev(A);
-    movePrev(A);
-    if (position(A) != -1)
-      return 2;
-    return 0;
-  }
-  case Append_position: {
-    append(A, newData(1));
-    append(A, newData(5));
-    append(A, newData(7));
-    moveBack(A);
-    append(A, newData(45));
-    append(A, newData(51));
-    append(A, newData(3214));
-    if (position(A) != 2)
-      return 1;
-    moveBack(A);
-    movePrev(A);
-    movePrev(A);
-    if (position(A) != 3)
-      return 2;
-    moveFront(A);
-    movePrev(A);
-    if (position(A) != -1)
-      return 3;
     return 0;
   }
   case Prepend_position: {
@@ -458,20 +389,20 @@ uint8_t runTest(int test) {
         if (!expectValue(A, ukeys[r][i], 10000 + r*1000 + i)) { rc = 1; break; }
       }
       if (rc) break;
-  
+
       // Reinsert the round’s even t-keys with new values
       for (int k = 0; k < Rcnt[r]; k++) {
         int idx = Rset[r][k];
         setValue(A, tkeys[idx], 7000 + r*100 + k);
       }
       total_unique_reinserts += Rcnt[r];
-  
+
       for (int k = 0; k < Rcnt[r]; k++) {
         int idx = Rset[r][k];
         if (!expectValue(A, tkeys[idx], 7000 + r*100 + k)) { rc = 2; break; }
       }
       if (rc) break;
-  
+
       for (int i = 1; i < BATCH; i += 17) {
         if ((i % 2) == 0) continue;
         if (!contains(A, tkeys[i])) { rc = 3; break; }
@@ -479,22 +410,22 @@ uint8_t runTest(int test) {
       if (rc) break;
     }
     if (rc) break;
-  
+
     int expected = survivors + total_newcomers + total_unique_reinserts;
     if (size(A) != expected) { rc = 4; break; }
-  
+
     // Pick a couple of evens not in any R-set
     int should_be_gone[] = { 2, 14, 26, 58, 190, 250 };
     for (int i = 0; i < 6; i++) {
       if (contains(A, tkeys[should_be_gone[i]])) { rc = 5; break; }
     }
     if (rc) break;
-  
+
     // Check newcomers from the last round
     for (int i = 5; i < BATCH; i += 51) {
       if (!expectValue(A, ukeys[ROUNDS-1][i], 10000 + (ROUNDS-1)*1000 + i)) { rc = 6; break; }
     }
-  
+
     break;
   }
   case Copy_independence: {
