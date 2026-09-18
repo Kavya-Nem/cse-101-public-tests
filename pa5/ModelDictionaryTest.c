@@ -86,60 +86,6 @@ bool expectDiagnostic(Dictionary D, const char *expected) {
   return matches;
 }
 
-    insertBefore(A, newData(100));
-    if (length(A) != 5)
-      return 1;
-    return 0;
-  }
-  case DeleteFront_length: {
-    prepend(A, newData(76));
-    prepend(A, newData(4));
-    deleteFront(A);
-    prepend(A, newData(3));
-    prepend(A, newData(1));
-    moveFront(A);
-    insertBefore(A, newData(115));
-    deleteFront(A);
-    if (length(A) != 3)
-      return 1;
-    return 0;
-  }
-  case DeleteBack_length: {
-    append(A, newData(1));
-    deleteBack(A);
-    append(A, newData(2));
-    append(A, newData(3));
-    append(A, newData(5));
-    moveFront(A);
-    insertAfter(A, newData(12));
-    deleteBack(A);
-    if (length(A) != 3)
-      return 1;
-    return 0;
-  }
-  case Delete_length: {
-    append(A, newData(1));
-    append(A, newData(2));
-    moveFront(A);
-    delete (A);
-    append(A, newData(3));
-    append(A, newData(5));
-    moveFront(A);
-    insertAfter(A, newData(12));
-    delete (A);
-    if (length(A) != 3)
-      return 1;
-    return 0;
-  }
-  case EmptyList_position: {
-    if (position(A) != -1)
-      return 1;
-    return 0;
-  }
-  case MoveFront_position: {
-    append(A, newData(1));
-    append(A, newData(5));
-    append(A, newData(16));
     append(A, newData(176));
     append(A, newData(3214));
     moveFront(A);
@@ -480,7 +426,7 @@ uint8_t runTest(int test) {
     const int ROUNDS = 3;
     char tkeys[BATCH][16];
     char ukeys[ROUNDS][BATCH][24];
-  
+
     for (int i = 0; i < BATCH; i++) {
       snprintf(tkeys[i], sizeof tkeys[i], "t%03d", i);
       setValue(A, tkeys[i], i);
@@ -488,19 +434,19 @@ uint8_t runTest(int test) {
     for (int i = 0; i < BATCH; i += 2) {
       removeKey(A, tkeys[i]);
     }
-  
+
     int survivors = BATCH / 2;
     int total_newcomers = 0;
     int total_unique_reinserts = 0;
-  
+
     // Make sure no overlap between rounds
     const int R0[] = {  8,  12,  24,  36,  44,  52,  60,  72 };
     const int R1[] = { 100, 104, 112, 124, 132, 144, 156, 168 };
     const int R2[] = { 200, 204, 212, 220, 224, 228, 232, 236 };
-  
+
     const int* Rset[3] = { R0, R1, R2 };
     const int  Rcnt[3] = { 8, 8, 8 };
-  
+
     // Rounds: insert newcomers and reinsert a distinct subset each round
     for (int r = 0; r < ROUNDS; r++) {
       for (int i = 0; i < BATCH; i++) {
