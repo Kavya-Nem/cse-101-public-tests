@@ -86,199 +86,6 @@ bool expectDiagnostic(Dictionary D, const char *expected) {
   return matches;
 }
 
-    return 0;
-  }
-  case Prepend_position: {
-    prepend(A, newData(1));
-    prepend(A, newData(5));
-    prepend(A, newData(7));
-    moveFront(A);
-    prepend(A, newData(45));
-    prepend(A, newData(51));
-    prepend(A, newData(3214));
-    prepend(A, newData(314));
-    prepend(A, newData(324));
-    if (position(A) != 5)
-      return 1;
-    moveBack(A);
-    movePrev(A);
-    prepend(A, newData(234));
-    movePrev(A);
-    if (position(A) != 6)
-      return 2;
-    moveFront(A);
-    movePrev(A);
-    if (position(A) != -1)
-      return 3;
-    return 0;
-  }
-  case InsertAfter_position: {
-    append(A, newData(5));
-    append(A, newData(6));
-    append(A, newData(4));
-    append(A, newData(33));
-    append(A, newData(2));
-    append(A, newData(1));
-    moveBack(A);
-    insertAfter(A, newData(75));
-    moveNext(A);
-    if (position(A) != 6)
-      return 1;
-    insertAfter(A, newData(345));
-    moveBack(A);
-    if (position(A) != 7)
-      return 2;
-    return 0;
-  }
-  case InsertBefore_position: {
-    prepend(A, newData(34));
-    prepend(A, newData(4));
-    prepend(A, newData(354));
-    prepend(A, newData(3674));
-    moveBack(A);
-    insertBefore(A, newData(435));
-    if (position(A) != 4)
-      return 1;
-    prepend(A, newData(324));
-    prepend(A, newData(33464));
-    prepend(A, newData(3498));
-    moveFront(A);
-    insertBefore(A, newData(67));
-    if (position(A) != 1)
-      return 2;
-    return 0;
-  }
-  case DeleteFront_position: {
-    prepend(A, newData(5));
-    prepend(A, newData(65));
-    prepend(A, newData(43));
-    prepend(A, newData(2));
-    prepend(A, newData(8));
-    prepend(A, newData(1));
-    moveFront(A);
-    deleteFront(A);
-    if (position(A) != -1)
-      return 1;
-    moveBack(A);
-    deleteFront(A);
-    if (position(A) != 3)
-      return 2;
-    return 0;
-  }
-  case DeleteBack_position: {
-    prepend(A, newData(5));
-    prepend(A, newData(65));
-    prepend(A, newData(43));
-    prepend(A, newData(2));
-    prepend(A, newData(8));
-    prepend(A, newData(1));
-    moveBack(A);
-    deleteBack(A);
-    if (position(A) != -1)
-      return 1;
-    moveFront(A);
-    deleteBack(A);
-    moveNext(A);
-    if (position(A) != 1)
-      return 2;
-    return 0;
-  }
-  case Delete_position: {
-    prepend(A, newData(5));
-    prepend(A, newData(65));
-    prepend(A, newData(43));
-    moveBack(A);
-    delete (A);
-    if (position(A) != -1)
-      return 1;
-    prepend(A, newData(2));
-    prepend(A, newData(8));
-    prepend(A, newData(1));
-    moveBack(A);
-    if (position(A) != 4)
-      return 2;
-    delete (A);
-    moveBack(A);
-    if (position(A) != 3)
-      return 3;
-    moveFront(A);
-    delete (A);
-    moveFront(A);
-    if (position(A) != 0)
-      return 4;
-    delete (A);
-    if (position(A) != -1)
-      return 5;
-    return 0;
-  }
-  case Empty_clear: {
-    clear(A);
-    if (position(A) != -1 || length(A) != 0)
-      return 1;
-    return 0;
-  }
-  case NonEmpty_clear: {
-    append(A, newData(1));
-    prepend(A, newData(2));
-    moveFront(A);
-    clear(A);
-    if (position(A) != -1 || length(A) != 0)
-      return 1;
-    return 0;
-  }
-  case Set_get: {
-    append(A, newData(1));
-    prepend(A, newData(2));
-    deleteFront(A);
-    moveBack(A);
-    if (*(int *)get(A) != 1)
-      return 1;
-    return 0;
-  }
-  case Set_front: {
-    append(A, newData(1));
-    prepend(A, newData(5));
-    moveBack(A);
-    if (*(int *)front(A) != 5)
-      return 1;
-    return 0;
-  }
-  case NonEmpty_front: {
-    prepend(A, newData(5));
-    append(A, newData(7));
-    prepend(A, newData(2));
-    moveFront(A);
-    insertBefore(A, newData(43));
-    deleteFront(A);
-    delete (A);
-    if (*(int *)front(A) != 5)
-      return 1;
-    return 0;
-  }
-  case Set_back: {
-    prepend(A, newData(1));
-    append(A, newData(5));
-    moveFront(A);
-    if (*(int *)back(A) != 5)
-      return 1;
-    return 0;
-  }
-  case NonEmpty_back: {
-    append(A, newData(5));
-    prepend(A, newData(7));
-    append(A, newData(2));
-    moveBack(A);
-    insertAfter(A, newData(43));
-    deleteBack(A);
-    delete (A);
-    if (*(int *)back(A) != 5)
-      return 1;
-    return 0;
-  }
-  }
-  return 255;
-}
-
 // return 0 if pass otherwise the number of the test that was failed
 uint8_t runTest(int test) {
   Dictionary A = newDictionary();
@@ -451,7 +258,7 @@ uint8_t runTest(int test) {
   case Equals_consistency: {
     const char *seqA[] = {"one", "two", "three", "four"};
     for (int i = 0; i < 4; i++) setValue(A, seqA[i], i + 1);
-    
+
     if (!equals(A, A)) { rc = 1; break; }
     setValue(B, "three", 3);
     setValue(B, "one", 1);
@@ -472,7 +279,7 @@ uint8_t runTest(int test) {
     const int N = 4096;
     char keys[4096][16];
     for (int i = 0; i < N; i++) {
-      snprintf(keys[i], sizeof keys[i], "k%05d", i);
+      snprintf(keys[i], sizeof keys[i], "k%04d", i);
       setValue(A, keys[i], i);
     }
     if (size(A) != N) rc = 1;
@@ -531,7 +338,7 @@ uint8_t runTest(int test) {
   case Print_insert_order: {
     const char *keys[] = {"one", "two", "three", "four", "five"};
     for (int i = 0; i < 5; i++) setValue(A, keys[i], i + 1);
-    
+
     removeKey(A, "two");
     removeKey(A, "four");
     setValue(A, "two", 22);
@@ -569,9 +376,9 @@ uint8_t runTest(int test) {
     }
     // numPairs=22, numDeleted=12
     // tableLoadFactor = 22/32 approx 0.69 > 0.67
-    // dataDensity = 22/(22+12) approx 0.65 > 0.8
+    // dataDensity = 22/(22+12) approx 0.65 < 0.8
     // so compactify should happen
-    
+
     if (!expectDiagnostic(A, compact_expected)) rc = 3;
     break;
   }
