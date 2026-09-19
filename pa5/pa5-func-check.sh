@@ -16,7 +16,7 @@ for NUM in $(seq 1 $NUMTESTS); do
   if [ -f time$NUM.txt ]; then
     userTime=$(cat time$NUM.txt)
   else
-    userTime=$RUNTIME+1
+    userTime=$((RUNTIME+1))
   fi
   tooSlow=$(echo "$userTime > $RUNTIME" |bc -l)
   diff -bBwu out$NUM.txt "$RELATIVE_PATH/"model-outfile$NUM.txt &> diff$NUM.txt
