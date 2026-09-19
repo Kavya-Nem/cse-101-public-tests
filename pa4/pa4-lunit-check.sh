@@ -10,7 +10,11 @@ if gcc -o ModelListTest ModelListTest.o List.o; then
 fi
 timeout 15 /usr/bin/time -o listtime.txt -f "%U" ./ModelListTest -v > ListTest-out.txt 2> /dev/null
 t=$?
-userTime=$(cat listtime.txt || echo 6)
+if [ -f listtime.txt ]; then
+  userTime=$(cat listtime.txt)
+else
+  userTime=6
+fi
 tooSlow=$(echo "$userTime > 5" |bc -l)
 if [ $tooSlow -eq 0 ] && [ $t -eq 0 ]; then
   ((testspassed++))
@@ -19,5 +23,4 @@ timeout 15 valgrind --error-exitcode=2 --leak-check=full -v ./ModelListTest > /d
 if [ $? -eq 0 ]; then
   ((testspassed++))
 fi
-exit $((4-$testspassed))
-
+exit $((4-testspassed))
