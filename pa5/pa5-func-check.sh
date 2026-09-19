@@ -33,4 +33,4 @@ for NUM in $(seq 1 $NUMTESTS); do
     let valgrindtestspassed+=1
   fi
 done
-exit $(((2*$NUMTESTS+2)-($lextestspassed+$valgrindtestspassed)))
+exit $((2*NUMTESTS+2-lextestspassed-valgrindtestspassed))
