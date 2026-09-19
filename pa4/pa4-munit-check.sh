@@ -11,7 +11,11 @@ if gcc -o ModelMatrixTest ModelMatrixTest.o Matrix.o List.o; then
 fi
 timeout 20 /usr/bin/time -o time.txt -f "%U" ./ModelMatrixTest -v > MatrixTest-out.txt 2> /dev/null
 t=$?
-userTime=$(cat time.txt || echo $((TIME+1)))
+if [ -f time.txt ]; then
+  userTime=$(cat time.txt)
+else
+  userTime=$((TIME+1))
+fi
 tooSlow=$(echo "$userTime > $TIME" |bc -l)
 if [ $tooSlow -eq 0 ] && [ $t -eq 0 ]; then
   ((testspassed++))
@@ -20,5 +24,4 @@ timeout 20 valgrind --error-exitcode=2 --leak-check=full -v ./ModelMatrixTest > 
 if [ $? -eq 0 ]; then
   ((testspassed++))
 fi
-
-exit $((4-$testspassed))
+exit $((4-testspassed))
