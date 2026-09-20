@@ -124,12 +124,13 @@ uint8_t runTest(List *pA, int test) {
     append(A, C);
     append(A, D);
     append(A, E);
-    if (length(A) != 4)
+    if (length(A) != 4) {
       free(B);
       free(C);
       free(D);
       free(E);
       return 1;
+    }
     free(B);
     free(C);
     free(D);
@@ -145,12 +146,13 @@ uint8_t runTest(List *pA, int test) {
     prepend(A, C);
     prepend(A, D);
     prepend(A, E);
-    if (length(A) != 4)
+    if (length(A) != 4) {
       free(B);
       free(C);
       free(D);
       free(E);
       return 1;
+    }
     free(B);
     free(C);
     free(D);
@@ -169,13 +171,14 @@ uint8_t runTest(List *pA, int test) {
     append(A, E);
     moveFront(A);
     insertAfter(A, F);
-    if (length(A) != 5)
+    if (length(A) != 5) {
       free(B);
       free(C);
       free(D);
       free(E);
       free(F);
       return 1;
+    }
     free(B);
     free(C);
     free(D);
@@ -195,13 +198,14 @@ uint8_t runTest(List *pA, int test) {
     prepend(A, E);
     moveFront(A);
     insertBefore(A, F);
-    if (length(A) != 5)
+    if (length(A) != 5) {
       free(B);
       free(C);
       free(D);
       free(E);
       free(F);
       return 1;
+    }
     free(B);
     free(C);
     free(D);
@@ -223,13 +227,14 @@ uint8_t runTest(List *pA, int test) {
     moveFront(A);
     insertBefore(A, F);
     deleteFront(A);
-    if (length(A) != 3)
+    if (length(A) != 3) {
       free(B);
       free(C);
       free(D);
       free(E);
       free(F);
       return 1;
+    }
     free(B);
     free(C);
     free(D);
@@ -251,13 +256,14 @@ uint8_t runTest(List *pA, int test) {
     moveFront(A);
     insertAfter(A, F);
     deleteBack(A);
-    if (length(A) != 3)
+    if (length(A) != 3) {
       free(B);
       free(C);
       free(D);
       free(E);
       free(F);
       return 1;
+    }
     free(B);
     free(C);
     free(D);
@@ -280,13 +286,14 @@ uint8_t runTest(List *pA, int test) {
     moveFront(A);
     insertAfter(A, F);
     delete (A);
-    if (length(A) != 3)
+    if (length(A) != 3) {
       free(B);
       free(C);
       free(D);
       free(E);
       free(F);
       return 1;
+    }
     free(B);
     free(C);
     free(D);
@@ -311,13 +318,14 @@ uint8_t runTest(List *pA, int test) {
     append(A, E);
     append(A, F);
     moveFront(A);
-    if (position(A) != 0)
+    if (position(A) != 0) {
       free(B);
       free(C);
       free(D);
       free(E);
       free(F);
       return 1;
+    }
     free(B);
     free(C);
     free(D);
@@ -337,13 +345,14 @@ uint8_t runTest(List *pA, int test) {
     append(A, E);
     append(A, F);
     moveBack(A);
-    if (position(A) != 4)
+    if (position(A) != 4) {
       free(B);
       free(C);
       free(D);
       free(E);
       free(F);
       return 1;
+    }
     free(B);
     free(C);
     free(D);
@@ -365,23 +374,25 @@ uint8_t runTest(List *pA, int test) {
     moveFront(A);
     moveNext(A);
     moveNext(A);
-    if (position(A) != 2)
+    if (position(A) != 2) {
       free(B);
       free(C);
       free(D);
       free(E);
       free(F);
       return 1;
+    }
     moveNext(A);
     moveNext(A);
     moveNext(A);
-    if (position(A) != -1)
+    if (position(A) != -1) {
       free(B);
       free(C);
       free(D);
       free(E);
       free(F);
       return 2;
+    }
     free(B);
     free(C);
     free(D);
@@ -398,18 +409,20 @@ uint8_t runTest(List *pA, int test) {
     append(A, D);
     moveBack(A);
     movePrev(A);
-    if (position(A) != 1)
+    if (position(A) != 1) {
       free(B);
       free(C);
       free(D);
       return 1;
+    }
     movePrev(A);
     movePrev(A);
-    if (position(A) != -1)
+    if (position(A) != -1) {
       free(B);
       free(C);
       free(D);
       return 2;
+    }
     free(B);
     free(C);
     free(D);
@@ -429,7 +442,7 @@ uint8_t runTest(List *pA, int test) {
     append(A, E);
     append(A, F);
     append(A, G);
-    if (position(A) != 2)
+    if (position(A) != 2) {
       free(B);
       free(C);
       free(D);
@@ -437,10 +450,11 @@ uint8_t runTest(List *pA, int test) {
       free(F);
       free(G);
       return 1;
+    }
     moveBack(A);
     movePrev(A);
     movePrev(A);
-    if (position(A) != 3)
+    if (position(A) != 3) {
       free(B);
       free(C);
       free(D);
@@ -448,9 +462,10 @@ uint8_t runTest(List *pA, int test) {
       free(F);
       free(G);
       return 2;
+    }
     moveFront(A);
     movePrev(A);
-    if (position(A) != -1)
+    if (position(A) != -1) {
       free(B);
       free(C);
       free(D);
@@ -458,6 +473,7 @@ uint8_t runTest(List *pA, int test) {
       free(F);
       free(G);
       return 3;
+    }
     free(B);
     free(C);
     free(D);
@@ -485,7 +501,7 @@ uint8_t runTest(List *pA, int test) {
     prepend(A, G);
     prepend(A, H);
     prepend(A, I);
-    if (position(A) != 5)
+    if (position(A) != 5) {
       free(B);
       free(C);
       free(D);
@@ -495,11 +511,12 @@ uint8_t runTest(List *pA, int test) {
       free(H);
       free(I);
       return 1;
+    }
     moveBack(A);
     movePrev(A);
     prepend(A, J);
     movePrev(A);
-    if (position(A) != 6)
+    if (position(A) != 6) {
       free(B);
       free(C);
       free(D);
@@ -510,9 +527,10 @@ uint8_t runTest(List *pA, int test) {
       free(I);
       free(J);
       return 2;
+    }
     moveFront(A);
     movePrev(A);
-    if (position(A) != -1)
+    if (position(A) != -1) {
       free(B);
       free(C);
       free(D);
@@ -523,6 +541,7 @@ uint8_t runTest(List *pA, int test) {
       free(I);
       free(J);
       return 3;
+    }
     free(B);
     free(C);
     free(D);
@@ -552,7 +571,7 @@ uint8_t runTest(List *pA, int test) {
     moveBack(A);
     insertAfter(A, H);
     moveNext(A);
-    if (position(A) != 6)
+    if (position(A) != 6) {
       free(B);
       free(C);
       free(D);
@@ -561,9 +580,10 @@ uint8_t runTest(List *pA, int test) {
       free(G);
       free(H);
       return 1;
+    }
     insertAfter(A, I);
     moveBack(A);
-    if (position(A) != 7)
+    if (position(A) != 7) {
       free(B);
       free(C);
       free(D);
@@ -573,6 +593,7 @@ uint8_t runTest(List *pA, int test) {
       free(H);
       free(I);
       return 2;
+    }
     free(B);
     free(C);
     free(D);
@@ -599,19 +620,20 @@ uint8_t runTest(List *pA, int test) {
     prepend(A, E);
     moveBack(A);
     insertBefore(A, F);
-    if (position(A) != 4)
+    if (position(A) != 4) {
       free(B);
       free(C);
       free(D);
       free(E);
       free(F);
       return 1;
+    }
     prepend(A, G);
     prepend(A, H);
     prepend(A, I);
     moveFront(A);
     insertBefore(A, J);
-    if (position(A) != 1)
+    if (position(A) != 1) {
       free(B);
       free(C);
       free(D);
@@ -622,6 +644,7 @@ uint8_t runTest(List *pA, int test) {
       free(I);
       free(J);
       return 2;
+    }
     free(B);
     free(C);
     free(D);
@@ -648,7 +671,7 @@ uint8_t runTest(List *pA, int test) {
     prepend(A, G);
     moveFront(A);
     deleteFront(A);
-    if (position(A) != -1)
+    if (position(A) != -1) {
       free(B);
       free(C);
       free(D);
@@ -656,9 +679,10 @@ uint8_t runTest(List *pA, int test) {
       free(F);
       free(G);
       return 1;
+    }
     moveBack(A);
     deleteFront(A);
-    if (position(A) != 3)
+    if (position(A) != 3) {
       free(B);
       free(C);
       free(D);
@@ -666,6 +690,7 @@ uint8_t runTest(List *pA, int test) {
       free(F);
       free(G);
       return 2;
+    }
     free(B);
     free(C);
     free(D);
@@ -689,7 +714,7 @@ uint8_t runTest(List *pA, int test) {
     prepend(A, G);
     moveBack(A);
     deleteBack(A);
-    if (position(A) != -1)
+    if (position(A) != -1) {
       free(B);
       free(C);
       free(D);
@@ -697,10 +722,11 @@ uint8_t runTest(List *pA, int test) {
       free(F);
       free(G);
       return 1;
+    }
     moveFront(A);
     deleteBack(A);
     moveNext(A);
-    if (position(A) != 1)
+    if (position(A) != 1) {
       free(B);
       free(C);
       free(D);
@@ -708,6 +734,7 @@ uint8_t runTest(List *pA, int test) {
       free(F);
       free(G);
       return 2;
+    }
     free(B);
     free(C);
     free(D);
@@ -728,16 +755,17 @@ uint8_t runTest(List *pA, int test) {
     prepend(A, D);
     moveBack(A);
     delete (A);
-    if (position(A) != -1)
+    if (position(A) != -1) {
       free(B);
       free(C);
       free(D);
       return 1;
+    }
     prepend(A, E);
     prepend(A, F);
     prepend(A, G);
     moveBack(A);
-    if (position(A) != 4)
+    if (position(A) != 4) {
       free(B);
       free(C);
       free(D);
@@ -745,9 +773,10 @@ uint8_t runTest(List *pA, int test) {
       free(F);
       free(G);
       return 2;
+    }
     delete (A);
     moveBack(A);
-    if (position(A) != 3)
+    if (position(A) != 3) {
       free(B);
       free(C);
       free(D);
@@ -755,10 +784,11 @@ uint8_t runTest(List *pA, int test) {
       free(F);
       free(G);
       return 3;
+    }
     moveFront(A);
     delete (A);
     moveFront(A);
-    if (position(A) != 0)
+    if (position(A) != 0) {
       free(B);
       free(C);
       free(D);
@@ -766,8 +796,9 @@ uint8_t runTest(List *pA, int test) {
       free(F);
       free(G);
       return 4;
+    }
     delete (A);
-    if (position(A) != -1)
+    if (position(A) != -1) {
       free(B);
       free(C);
       free(D);
@@ -775,6 +806,7 @@ uint8_t runTest(List *pA, int test) {
       free(F);
       free(G);
       return 5;
+    }
     free(B);
     free(C);
     free(D);
@@ -796,9 +828,10 @@ uint8_t runTest(List *pA, int test) {
     prepend(A, C);
     moveFront(A);
     clear(A);
-    if (position(A) != -1 || length(A) != 0)
+    if (position(A) != -1 || length(A) != 0) {
       free(B);
       free(C);
+    }
       return 1;
     free(B);
     free(C);
@@ -811,10 +844,11 @@ uint8_t runTest(List *pA, int test) {
     prepend(A, C);
     deleteFront(A);
     moveBack(A);
-    if (*(int *)get(A) != 1)
+    if (*(int *)get(A) != 1) {
       free(B);
       free(C);
       return 1;
+    }
     free(B);
     free(C);
     return 0;
@@ -825,10 +859,11 @@ uint8_t runTest(List *pA, int test) {
     append(A, B);
     prepend(A, C);
     moveBack(A);
-    if (*(int *)front(A) != 5)
+    if (*(int *)front(A) != 5) {
       free(B);
       free(C);
       return 1;
+    }
     free(B);
     free(C);
     return 0;
@@ -845,12 +880,13 @@ uint8_t runTest(List *pA, int test) {
     insertBefore(A, E);
     deleteFront(A);
     delete (A);
-    if (*(int *)front(A) != 5)
+    if (*(int *)front(A) != 5) {
       free(B);
       free(C);
       free(D);
       free(E);
       return 1;
+    }
     free(B);
     free(C);
     free(D);
@@ -863,10 +899,11 @@ uint8_t runTest(List *pA, int test) {
     prepend(A, B);
     append(A, C);
     moveFront(A);
-    if (*(int *)back(A) != 5)
+    if (*(int *)back(A) != 5) {
       free(B);
       free(C);
       return 1;
+    }
     free(B);
     free(C);
     return 0;
@@ -883,12 +920,13 @@ uint8_t runTest(List *pA, int test) {
     insertAfter(A, E);
     deleteBack(A);
     delete (A);
-    if (*(int *)back(A) != 5)
+    if (*(int *)back(A) != 5) {
       free(B);
       free(C);
       free(D);
       free(E);
       return 1;
+    }
     free(B);
     free(C);
     free(D);
@@ -953,4 +991,3 @@ int main(int argc, char **argv) {
     printf("\nYou passed %d out of %d tests\n", testsPassed, NUM_TESTS); 
   exit(NUM_TESTS - testsPassed);
 }
-
