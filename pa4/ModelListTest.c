@@ -584,84 +584,203 @@ uint8_t runTest(List *pA, int test) {
     return 0;
   }
   case InsertBefore_position: {
-    prepend(A, newData(34));
-    prepend(A, newData(4));
-    prepend(A, newData(354));
-    prepend(A, newData(3674));
+    int *B = newData(34);
+    int *C = newData(4);
+    int *D = newData(354);
+    int *E = newData(3674);
+    int *F = newData(435);
+    int *G = newData(324);
+    int *H = newData(33464);
+    int *I = newData(3498);
+    int *J = newData(67);
+    prepend(A, B);
+    prepend(A, C);
+    prepend(A, D);
+    prepend(A, E);
     moveBack(A);
-    insertBefore(A, newData(435));
+    insertBefore(A, F);
     if (position(A) != 4)
+      free(B);
+      free(C);
+      free(D);
+      free(E);
+      free(F);
       return 1;
-    prepend(A, newData(324));
-    prepend(A, newData(33464));
-    prepend(A, newData(3498));
+    prepend(A, G);
+    prepend(A, H);
+    prepend(A, I);
     moveFront(A);
-    insertBefore(A, newData(67));
+    insertBefore(A, J);
     if (position(A) != 1)
+      free(B);
+      free(C);
+      free(D);
+      free(E);
+      free(F);
+      free(G);
+      free(H);
+      free(I);
+      free(J);
       return 2;
+    free(B);
+    free(C);
+    free(D);
+    free(E);
+    free(F);
+    free(G);
+    free(H);
+    free(I);
+    free(J);
     return 0;
   }
   case DeleteFront_position: {
-    prepend(A, newData(5));
-    prepend(A, newData(65));
-    prepend(A, newData(43));
-    prepend(A, newData(2));
-    prepend(A, newData(8));
-    prepend(A, newData(1));
+    int *B = newData(5);
+    int *C = newData(65);
+    int *D = newData(43);
+    int *E = newData(2);
+    int *F = newData(8);
+    int *G = newData(1);
+    prepend(A, B);
+    prepend(A, C);
+    prepend(A, D);
+    prepend(A, E);
+    prepend(A, F);
+    prepend(A, G);
     moveFront(A);
     deleteFront(A);
     if (position(A) != -1)
+      free(B);
+      free(C);
+      free(D);
+      free(E);
+      free(F);
+      free(G);
       return 1;
     moveBack(A);
     deleteFront(A);
     if (position(A) != 3)
+      free(B);
+      free(C);
+      free(D);
+      free(E);
+      free(F);
+      free(G);
       return 2;
+    free(B);
+    free(C);
+    free(D);
+    free(E);
+    free(F);
+    free(G);
     return 0;
   }
   case DeleteBack_position: {
-    prepend(A, newData(5));
-    prepend(A, newData(65));
-    prepend(A, newData(43));
-    prepend(A, newData(2));
-    prepend(A, newData(8));
-    prepend(A, newData(1));
+    int *B = newData(5);
+    int *C = newData(65);
+    int *D = newData(43);
+    int *E = newData(2);
+    int *F = newData(8);
+    int *G = newData(1);
+    prepend(A, B);
+    prepend(A, C);
+    prepend(A, D);
+    prepend(A, E);
+    prepend(A, F);
+    prepend(A, G);
     moveBack(A);
     deleteBack(A);
     if (position(A) != -1)
+      free(B);
+      free(C);
+      free(D);
+      free(E);
+      free(F);
+      free(G);
       return 1;
     moveFront(A);
     deleteBack(A);
     moveNext(A);
     if (position(A) != 1)
+      free(B);
+      free(C);
+      free(D);
+      free(E);
+      free(F);
+      free(G);
       return 2;
+    free(B);
+    free(C);
+    free(D);
+    free(E);
+    free(F);
+    free(G);
     return 0;
   }
   case Delete_position: {
-    prepend(A, newData(5));
-    prepend(A, newData(65));
-    prepend(A, newData(43));
+    int *B = newData(5);
+    int *C = newData(65);
+    int *D = newData(43);
+    int *E = newData(2);
+    int *F = newData(8);
+    int *G = newData(1);
+    prepend(A, B);
+    prepend(A, C);
+    prepend(A, D);
     moveBack(A);
     delete (A);
     if (position(A) != -1)
+      free(B);
+      free(C);
+      free(D);
       return 1;
-    prepend(A, newData(2));
-    prepend(A, newData(8));
-    prepend(A, newData(1));
+    prepend(A, E);
+    prepend(A, F);
+    prepend(A, G);
     moveBack(A);
     if (position(A) != 4)
+      free(B);
+      free(C);
+      free(D);
+      free(E);
+      free(F);
+      free(G);
       return 2;
     delete (A);
     moveBack(A);
     if (position(A) != 3)
+      free(B);
+      free(C);
+      free(D);
+      free(E);
+      free(F);
+      free(G);
       return 3;
     moveFront(A);
     delete (A);
     moveFront(A);
     if (position(A) != 0)
+      free(B);
+      free(C);
+      free(D);
+      free(E);
+      free(F);
+      free(G);
       return 4;
     delete (A);
     if (position(A) != -1)
+      free(B);
+      free(C);
+      free(D);
+      free(E);
+      free(F);
+      free(G);
       return 5;
+    free(B);
+    free(C);
+    free(D);
+    free(E);
+    free(F);
+    free(G);
     return 0;
   }
   case Empty_clear: {
@@ -671,12 +790,18 @@ uint8_t runTest(List *pA, int test) {
     return 0;
   }
   case NonEmpty_clear: {
-    append(A, newData(1));
-    prepend(A, newData(2));
+    int *B = newData(1);
+    int *C = newData(2);
+    append(A, B);
+    prepend(A, C);
     moveFront(A);
     clear(A);
     if (position(A) != -1 || length(A) != 0)
+      free(B);
+      free(C);
       return 1;
+    free(B);
+    free(C);
     return 0;
   }
   case Set_get: {
