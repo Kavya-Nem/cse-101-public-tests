@@ -831,8 +831,8 @@ uint8_t runTest(List *pA, int test) {
     if (position(A) != -1 || length(A) != 0) {
       free(B);
       free(C);
-    }
       return 1;
+    }
     free(B);
     free(C);
     return 0;
