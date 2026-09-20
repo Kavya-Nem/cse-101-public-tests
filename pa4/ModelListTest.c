@@ -116,83 +116,182 @@ uint8_t runTest(List *pA, int test) {
     return 0;
   }
   case Append_length: {
-    append(A, newData(1));
-    append(A, newData(2));
-    append(A, newData(3));
-    append(A, newData(5));
+    int *B = newData(1);
+    int *C = newData(2);
+    int *D = newData(3);
+    int *E = newData(4);
+    append(A, B);
+    append(A, C);
+    append(A, D);
+    append(A, E);
     if (length(A) != 4)
+      free(B);
+      free(C);
+      free(D);
+      free(E);
       return 1;
+    free(B);
+    free(C);
+    free(D);
+    free(E);
     return 0;
   }
   case Prepend_length: {
-    prepend(A, newData(6));
-    prepend(A, newData(4));
-    prepend(A, newData(2));
-    prepend(A, newData(1));
+    int *B = newData(6);
+    int *C = newData(4);
+    int *D = newData(2);
+    int *E = newData(1);
+    prepend(A, B);
+    prepend(A, C);
+    prepend(A, D);
+    prepend(A, E);
     if (length(A) != 4)
+      free(B);
+      free(C);
+      free(D);
+      free(E);
       return 1;
+    free(B);
+    free(C);
+    free(D);
+    free(E);
     return 0;
   }
   case InsertAfter_length: {
-    append(A, newData(1));
-    append(A, newData(2));
-    append(A, newData(3));
-    append(A, newData(5));
+    int *B = newData(1);
+    int *C = newData(2);
+    int *D = newData(3);
+    int *E = newData(5);
+    int *F = newData(12);
+    append(A, B);
+    append(A, C);
+    append(A, D);
+    append(A, E);
     moveFront(A);
-    insertAfter(A, newData(12));
+    insertAfter(A, F);
     if (length(A) != 5)
+      free(B);
+      free(C);
+      free(D);
+      free(E);
+      free(F);
       return 1;
+    free(B);
+    free(C);
+    free(D);
+    free(E);
+    free(F);
     return 0;
   }
   case InsertBefore_length: {
-    prepend(A, newData(76));
-    prepend(A, newData(4));
-    prepend(A, newData(3));
-    prepend(A, newData(1));
+    int *B = newData(76);
+    int *C = newData(4);
+    int *D = newData(3);
+    int *E = newData(1);
+    int *F = newData(100);
+    prepend(A, B);
+    prepend(A, C);
+    prepend(A, D);
+    prepend(A, E);
     moveFront(A);
-    insertBefore(A, newData(100));
+    insertBefore(A, F);
     if (length(A) != 5)
+      free(B);
+      free(C);
+      free(D);
+      free(E);
+      free(F);
       return 1;
+    free(B);
+    free(C);
+    free(D);
+    free(E);
+    free(F);
     return 0;
   }
   case DeleteFront_length: {
-    prepend(A, newData(76));
-    prepend(A, newData(4));
+    int *B = newData(76);
+    int *C = newData(4);
+    int *D = newData(3);
+    int *E = newData(1);
+    int *F = newData(115);
+    prepend(A, B);
+    prepend(A, C);
     deleteFront(A);
-    prepend(A, newData(3));
-    prepend(A, newData(1));
+    prepend(A, D);
+    prepend(A, E);
     moveFront(A);
-    insertBefore(A, newData(115));
+    insertBefore(A, F);
     deleteFront(A);
     if (length(A) != 3)
+      free(B);
+      free(C);
+      free(D);
+      free(E);
+      free(F);
       return 1;
+    free(B);
+    free(C);
+    free(D);
+    free(E);
+    free(F);
     return 0;
   }
   case DeleteBack_length: {
-    append(A, newData(1));
+    int *B = newData(1);
+    int *C = newData(2);
+    int *D = newData(3);
+    int *E = newData(5);
+    int *F = newData(12);
+    append(A, B);
     deleteBack(A);
-    append(A, newData(2));
-    append(A, newData(3));
-    append(A, newData(5));
+    append(A, C);
+    append(A, D);
+    append(A, E);
     moveFront(A);
-    insertAfter(A, newData(12));
+    insertAfter(A, F);
     deleteBack(A);
     if (length(A) != 3)
+      free(B);
+      free(C);
+      free(D);
+      free(E);
+      free(F);
       return 1;
+    free(B);
+    free(C);
+    free(D);
+    free(E);
+    free(F);
     return 0;
   }
   case Delete_length: {
-    append(A, newData(1));
-    append(A, newData(2));
+    int *B = newData(1);
+    int *C = newData(2);
+    int *D = newData(3);
+    int *E = newData(5);
+    int *F = newData(12);
+    append(A, B);
+    append(A, C);
     moveFront(A);
     delete (A);
-    append(A, newData(3));
-    append(A, newData(5));
+    append(A, D);
+    append(A, E);
     moveFront(A);
-    insertAfter(A, newData(12));
+    insertAfter(A, F);
     delete (A);
     if (length(A) != 3)
+      free(B);
+      free(C);
+      free(D);
+      free(E);
+      free(F);
       return 1;
+    free(B);
+    free(C);
+    free(D);
+    free(E);
+    free(F);
     return 0;
   }
   case EmptyList_position: {
@@ -201,120 +300,287 @@ uint8_t runTest(List *pA, int test) {
     return 0;
   }
   case MoveFront_position: {
-    append(A, newData(1));
-    append(A, newData(5));
-    append(A, newData(16));
-    append(A, newData(176));
-    append(A, newData(3214));
+    int *B = newData(1);
+    int *C = newData(5);
+    int *D = newData(16);
+    int *E = newData(176);
+    int *F = newData(3214);
+    append(A, B);
+    append(A, C);
+    append(A, D);
+    append(A, E);
+    append(A, F);
     moveFront(A);
     if (position(A) != 0)
+      free(B);
+      free(C);
+      free(D);
+      free(E);
+      free(F);
       return 1;
+    free(B);
+    free(C);
+    free(D);
+    free(E);
+    free(F);
     return 0;
   }
   case MoveBack_position: {
-    append(A, newData(1));
-    append(A, newData(5));
-    append(A, newData(16));
-    append(A, newData(176));
-    append(A, newData(3214));
+    int *B = newData(1);
+    int *C = newData(5);
+    int *D = newData(16);
+    int *E = newData(176);
+    int *F = newData(3214);
+    append(A, B);
+    append(A, C);
+    append(A, D);
+    append(A, E);
+    append(A, F);
     moveBack(A);
     if (position(A) != 4)
+      free(B);
+      free(C);
+      free(D);
+      free(E);
+      free(F);
       return 1;
+    free(B);
+    free(C);
+    free(D);
+    free(E);
+    free(F);
     return 0;
   }
   case MoveNext_position: {
-    append(A, newData(1));
-    append(A, newData(5));
-    append(A, newData(16));
-    append(A, newData(176));
-    append(A, newData(3214));
+    int *B = newData(1);
+    int *C = newData(5);
+    int *D = newData(16);
+    int *E = newData(176);
+    int *F = newData(3214);
+    append(A, B);
+    append(A, C);
+    append(A, D);
+    append(A, E);
+    append(A, F);
     moveFront(A);
     moveNext(A);
     moveNext(A);
     if (position(A) != 2)
+      free(B);
+      free(C);
+      free(D);
+      free(E);
+      free(F);
       return 1;
     moveNext(A);
     moveNext(A);
     moveNext(A);
     if (position(A) != -1)
+      free(B);
+      free(C);
+      free(D);
+      free(E);
+      free(F);
       return 2;
+    free(B);
+    free(C);
+    free(D);
+    free(E);
+    free(F);
     return 0;
   }
   case MovePrev_position: {
-    append(A, newData(1));
-    append(A, newData(5));
-    append(A, newData(3214));
+    int *B = newData(1);
+    int *C = newData(5);
+    int *D = newData(3214);
+    append(A, B);
+    append(A, C);
+    append(A, D);
     moveBack(A);
     movePrev(A);
     if (position(A) != 1)
+      free(B);
+      free(C);
+      free(D);
       return 1;
     movePrev(A);
     movePrev(A);
     if (position(A) != -1)
+      free(B);
+      free(C);
+      free(D);
       return 2;
+    free(B);
+    free(C);
+    free(D);
     return 0;
   }
   case Append_position: {
-    append(A, newData(1));
-    append(A, newData(5));
-    append(A, newData(7));
+    int *B = newData(1);
+    int *C = newData(5);
+    int *D = newData(7);
+    int *E = newData(45);
+    int *F = newData(51);
+    int *G = newData(3214);
+    append(A, B);
+    append(A, C);
+    append(A, D);
     moveBack(A);
-    append(A, newData(45));
-    append(A, newData(51));
-    append(A, newData(3214));
+    append(A, E);
+    append(A, F);
+    append(A, G);
     if (position(A) != 2)
+      free(B);
+      free(C);
+      free(D);
+      free(E);
+      free(F);
+      free(G);
       return 1;
     moveBack(A);
     movePrev(A);
     movePrev(A);
     if (position(A) != 3)
+      free(B);
+      free(C);
+      free(D);
+      free(E);
+      free(F);
+      free(G);
       return 2;
     moveFront(A);
     movePrev(A);
     if (position(A) != -1)
+      free(B);
+      free(C);
+      free(D);
+      free(E);
+      free(F);
+      free(G);
       return 3;
+    free(B);
+    free(C);
+    free(D);
+    free(E);
+    free(F);
+    free(G);
     return 0;
   }
   case Prepend_position: {
-    prepend(A, newData(1));
-    prepend(A, newData(5));
-    prepend(A, newData(7));
+    int *B = newData(1);
+    int *C = newData(5);
+    int *D = newData(7);
+    int *E = newData(45);
+    int *F = newData(51);
+    int *G = newData(3214);
+    int *H = newData(314);
+    int *I = newData(324);
+    int *J = newData(234);
+    prepend(A, B);
+    prepend(A, C);
+    prepend(A, D);
     moveFront(A);
-    prepend(A, newData(45));
-    prepend(A, newData(51));
-    prepend(A, newData(3214));
-    prepend(A, newData(314));
-    prepend(A, newData(324));
+    prepend(A, E);
+    prepend(A, F);
+    prepend(A, G);
+    prepend(A, H);
+    prepend(A, I);
     if (position(A) != 5)
+      free(B);
+      free(C);
+      free(D);
+      free(E);
+      free(F);
+      free(G);
+      free(H);
+      free(I);
       return 1;
     moveBack(A);
     movePrev(A);
-    prepend(A, newData(234));
+    prepend(A, J);
     movePrev(A);
     if (position(A) != 6)
+      free(B);
+      free(C);
+      free(D);
+      free(E);
+      free(F);
+      free(G);
+      free(H);
+      free(I);
+      free(J);
       return 2;
     moveFront(A);
     movePrev(A);
     if (position(A) != -1)
+      free(B);
+      free(C);
+      free(D);
+      free(E);
+      free(F);
+      free(G);
+      free(H);
+      free(I);
+      free(J);
       return 3;
+    free(B);
+    free(C);
+    free(D);
+    free(E);
+    free(F);
+    free(G);
+    free(H);
+    free(I);
+    free(J);
     return 0;
   }
   case InsertAfter_position: {
-    append(A, newData(5));
-    append(A, newData(6));
-    append(A, newData(4));
-    append(A, newData(33));
-    append(A, newData(2));
-    append(A, newData(1));
+    int *B = newData(5);
+    int *C = newData(6);
+    int *D = newData(4);
+    int *E = newData(33);
+    int *F = newData(2);
+    int *G = newData(1);
+    int *H = newData(75);
+    int *I = newData(345);
+    append(A, B);
+    append(A, C);
+    append(A, D);
+    append(A, E);
+    append(A, F);
+    append(A, G);
     moveBack(A);
-    insertAfter(A, newData(75));
+    insertAfter(A, H);
     moveNext(A);
     if (position(A) != 6)
+      free(B);
+      free(C);
+      free(D);
+      free(E);
+      free(F);
+      free(G);
+      free(H);
       return 1;
-    insertAfter(A, newData(345));
+    insertAfter(A, I);
     moveBack(A);
     if (position(A) != 7)
+      free(B);
+      free(C);
+      free(D);
+      free(E);
+      free(F);
+      free(G);
+      free(H);
+      free(I);
       return 2;
+    free(B);
+    free(C);
+    free(D);
+    free(E);
+    free(F);
+    free(G);
+    free(H);
+    free(I);
     return 0;
   }
   case InsertBefore_position: {
