@@ -805,52 +805,94 @@ uint8_t runTest(List *pA, int test) {
     return 0;
   }
   case Set_get: {
-    append(A, newData(1));
-    prepend(A, newData(2));
+    int *B = newData(1);
+    int *C = newData(2);
+    append(A, B);
+    prepend(A, C);
     deleteFront(A);
     moveBack(A);
     if (*(int *)get(A) != 1)
+      free(B);
+      free(C);
       return 1;
+    free(B);
+    free(C);
     return 0;
   }
   case Set_front: {
-    append(A, newData(1));
-    prepend(A, newData(5));
+    int *B = newData(1);
+    int *C = newData(5);
+    append(A, B);
+    prepend(A, C);
     moveBack(A);
     if (*(int *)front(A) != 5)
+      free(B);
+      free(C);
       return 1;
+    free(B);
+    free(C);
     return 0;
   }
   case NonEmpty_front: {
-    prepend(A, newData(5));
-    append(A, newData(7));
-    prepend(A, newData(2));
+    int *B = newData(5);
+    int *C = newData(7);
+    int *D = newData(2);
+    int *E = newData(43);
+    prepend(A, B);
+    append(A, C);
+    prepend(A, D);
     moveFront(A);
-    insertBefore(A, newData(43));
+    insertBefore(A, E);
     deleteFront(A);
     delete (A);
     if (*(int *)front(A) != 5)
+      free(B);
+      free(C);
+      free(D);
+      free(E);
       return 1;
+    free(B);
+    free(C);
+    free(D);
+    free(E);
     return 0;
   }
   case Set_back: {
-    prepend(A, newData(1));
-    append(A, newData(5));
+    int *B = newData(1);
+    int *C = newData(5);
+    prepend(A, B);
+    append(A, C);
     moveFront(A);
     if (*(int *)back(A) != 5)
+      free(B);
+      free(C);
       return 1;
+    free(B);
+    free(C);
     return 0;
   }
   case NonEmpty_back: {
-    append(A, newData(5));
-    prepend(A, newData(7));
-    append(A, newData(2));
+    int *B = newData(5);
+    int *C = newData(7);
+    int *D = newData(2);
+    int *E = newData(43);
+    append(A, B);
+    prepend(A, C);
+    append(A, D);
     moveBack(A);
-    insertAfter(A, newData(43));
+    insertAfter(A, E);
     deleteBack(A);
     delete (A);
     if (*(int *)back(A) != 5)
+      free(B);
+      free(C);
+      free(D);
+      free(E);
       return 1;
+    free(B);
+    free(C);
+    free(D);
+    free(E);
     return 0;
   }
   }
@@ -911,3 +953,4 @@ int main(int argc, char **argv) {
     printf("\nYou passed %d out of %d tests\n", testsPassed, NUM_TESTS); 
   exit(NUM_TESTS - testsPassed);
 }
+
