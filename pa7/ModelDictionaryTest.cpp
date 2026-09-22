@@ -7,34 +7,24 @@
 #include <iomanip>
 #include <iostream>
 #include <string>
-
 #include "../../pa7/Dictionary.h"
-
 #define FIRST_TEST Empty_size
-#define MAXSCORE 54
-#define CHARITY 10
-
 #define RED "\033[0;31m"
 #define CYAN "\033[0;36m"
 #define GREEN "\033[0;32m"
 #define NC "\033[0m"
-
 using namespace std;
-
 static uint8_t testsPassed;
 static volatile sig_atomic_t testStatus;
 static uint8_t disable_exit_handler;
 jmp_buf test_crash;
-
 enum Test_e {
   Empty_size = 0,
   SetValue_size,
   Remove_size,
-
   Empty_traverse,
   Empty_clear,
   NonEmpty_clear,
-
   Begin_value,
   End_value,
   Next_value,
@@ -42,16 +32,13 @@ enum Test_e {
   SetValue_value,
   Remove_value,
   GetValue_value,
-
   Repeated_setValue,
   Dictionary_equals,
   ToString_equals,
   PreString_equals,
   Contains_value,
-
   NUM_TESTS,
 };
-
 string testName(int test) {
   if (test == Empty_size)
     return "Empty_size";
@@ -59,14 +46,12 @@ string testName(int test) {
     return "SetValue_size";
   if (test == Remove_size)
     return "Remove_size";
-
   if (test == Empty_traverse)
     return "Empty_traverse";
   if (test == Empty_clear)
     return "Empty_clear";
   if (test == NonEmpty_clear)
     return "NonEmpty_clear";
-
   if (test == Begin_value)
     return "Begin_value";
   if (test == End_value)
@@ -81,7 +66,6 @@ string testName(int test) {
     return "Remove_value";
   if (test == GetValue_value)
     return "GetValue_value";
-
   if (test == Repeated_setValue)
     return "Repeated_setValue";
   if (test == Dictionary_equals)
@@ -92,10 +76,8 @@ string testName(int test) {
     return "PreString_equals";
   if (test == Contains_value)
     return "Contains_value";
-
   return "";
 }
-
 uint8_t runTest(Dictionary *pA, Dictionary *pB, int test) {
   Dictionary A = *pA;
   Dictionary B = *pB;
@@ -150,7 +132,6 @@ uint8_t runTest(Dictionary *pA, Dictionary *pB, int test) {
       return 4;
     } catch (logic_error const &) {
     }
-
     return 0;
   }
   case Empty_clear: {
@@ -187,14 +168,11 @@ uint8_t runTest(Dictionary *pA, Dictionary *pB, int test) {
     A.setValue("c", 16);
     A.setValue("f", 176);
     A.setValue("e", 3214);
-
     A.begin();
     if (A.currentVal() != 5 || A.currentKey() != "b")
       return 1;
-
     A.remove("b");
     A.begin();
-
     if (A.currentVal() != 16 || A.currentKey() != "c")
       return 2;
     return 0;
@@ -205,14 +183,11 @@ uint8_t runTest(Dictionary *pA, Dictionary *pB, int test) {
     A.setValue("c", 16);
     A.setValue("f", 176);
     A.setValue("e", 3214);
-
     A.end();
     if (A.currentVal() != 176 || A.currentKey() != "f")
       return 1;
-
     A.remove("f");
     A.end();
-
     if (A.currentVal() != 3214 || A.currentKey() != "e")
       return 2;
     return 0;
@@ -226,7 +201,6 @@ uint8_t runTest(Dictionary *pA, Dictionary *pB, int test) {
     A.begin();
     A.next();
     A.next();
-
     if (A.currentKey() != "c" || A.currentVal() != 16)
       return 1;
     A.next();
@@ -297,37 +271,26 @@ uint8_t runTest(Dictionary *pA, Dictionary *pB, int test) {
     A.setValue("h", 15);
     A.setValue("f", 20);
     A.setValue("i", 100);
-
     if (A.getValue("f") != 20)
       return 2;
-
     A.remove("f");
-
     if (A.contains("f"))
       return 3;
-
     return 0;
   }
   case Repeated_setValue: {
     A.setValue("d", 2);
     A.setValue("d", 5);
-
     if (A.size() != 1)
       return 1;
-
     if (A.getValue("d") != 5)
       return 2;
-
     A.setValue("d", 1);
-
     if (A.getValue("d") != 1)
       return 3;
-
     A.remove("d");
-
     if (A.size() != 0)
       return 4;
-
     return 0;
   }
   case Dictionary_equals: {
@@ -335,27 +298,22 @@ uint8_t runTest(Dictionary *pA, Dictionary *pB, int test) {
     B.clear();
     if (!(A == B))
       return 1;
-
     A.setValue("a", 1);
     A.setValue("b", 5);
     A.setValue("e", 10);
     A.setValue("h", 15);
     A.setValue("f", 20);
     A.setValue("i", 100);
-
     if ((A == B))
       return 2;
-
     B.setValue("a", 1);
     B.setValue("b", 5);
     B.setValue("e", 10);
     B.setValue("h", 15);
     B.setValue("f", 20);
     B.setValue("i", 100);
-
     if (!(A == B))
       return 3;
-
     B.clear();
     B.setValue("i", 100);
     B.setValue("f", 20);
@@ -363,10 +321,8 @@ uint8_t runTest(Dictionary *pA, Dictionary *pB, int test) {
     B.setValue("e", 10);
     B.setValue("b", 5);
     B.setValue("a", 1);
-
     if (!(A == B))
       return 4;
-
     return 0;
   }
   case ToString_equals: {
@@ -398,11 +354,9 @@ uint8_t runTest(Dictionary *pA, Dictionary *pB, int test) {
   case Contains_value: {
     if (A.contains("d"))
       return 1;
-
     A.setValue("d", 1);
     if (!A.contains("d"))
       return 2;
-
     A.remove("d");
     if (A.contains("d"))
       return 1;
@@ -411,47 +365,35 @@ uint8_t runTest(Dictionary *pA, Dictionary *pB, int test) {
   }
   return 255;
 }
-
-void segfault_handler(int signal) { // everyone knows what this is
+void segfault_handler(int signal) {
   testStatus = 255;
   longjmp(test_crash, 1);
 }
-
-void exit_attempt_handler(void) { // only I decide when you are done
+void exit_attempt_handler(void) {
   if (disable_exit_handler)
     return; // allow this to be disabled
   testStatus = 255;
   longjmp(test_crash, 2);
 }
-
 void abrupt_termination_handler(int signal) { // program killed externally
   testStatus = 255;
   longjmp(test_crash, 3);
 }
-
 int main(int argc, char **argv) {
   if (argc > 2 || (argc == 2 && strcmp(argv[1], "-v") != 0)) {
     printf("Usage: %s [-v]", (argc > 0 ? argv[0] : "./ModelDictionaryTest"));
     exit(1);
   }
-
-  printf("\n"); // more spacing
   if (argc == 2)
     printf("\n"); // consistency in verbose mode
-
   testsPassed = 0;
   disable_exit_handler = 0;
   atexit(exit_attempt_handler);
   signal(SIGSEGV, segfault_handler);
-  // signal(SIGTERM, abrupt_termination_handler); // dangerous
-  // signal(SIGINT, abrupt_termination_handler);
-  // signal(SIGFPE, abrupt_termination_handler);
-  // signal(SIGABRT, abrupt_termination_handler);
   for (uint8_t i = FIRST_TEST; i < NUM_TESTS; i++) {
     Dictionary A, B;
     uint8_t fail_type;
     try {
-
       testStatus = runTest(&A, &B, i);
       fail_type = setjmp(test_crash);
     } catch (...) {
@@ -470,7 +412,7 @@ int main(int argc, char **argv) {
                             : (fail_type == 3 ? "exception being thrown"
                                               : "program interruption")))
              << NC << endl;
-        cout << "\nWARNING: Program will now stop running tests\n" << endl;
+        cout << RED "\nWARNING: Program will now stop running tests\n" NC << endl;
         break;
       } else if (testStatus != 0) {
         cout << ": test " CYAN << testStatus << NC << endl;
@@ -482,23 +424,9 @@ int main(int argc, char **argv) {
       testsPassed++;
     }
   }
-
   disable_exit_handler = 1;
-
-  uint8_t totalScore = testsPassed * 3;
-
   if (argc == 2 && testStatus != 255)
     cout << "\nYou passed " << unsigned(testsPassed) << " out of " << NUM_TESTS
          << " tests" << endl;
-  else if (testStatus == 255) {
-    totalScore = CHARITY; // charity points
-    if (argc == 2)
-      cout << RED "Receiving charity points because your program crashes" NC
-           << endl;
-  }
-  cout << "You will receive " << unsigned(totalScore) << " out of " << MAXSCORE
-       << " possible points on the Dictionary Functionality Test\n"
-       << endl;
-  exit(0);
-  return 0;
+  exit(NUM_TESTS - testsPassed);
 }
