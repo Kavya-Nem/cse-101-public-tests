@@ -11,8 +11,6 @@
 #include "../../pa8/Dictionary.h"
 
 #define FIRST_TEST Empty_size
-#define MAXSCORE 45
-#define CHARITY 10
 
 #define RED "\033[0;31m"
 #define CYAN "\033[0;36m"
