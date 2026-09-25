@@ -266,15 +266,10 @@ uint8_t runTest(Dictionary *pA, Dictionary *pB, int test) {
     return 0;
   }
   case Remove_value: {
-    // string ideal1 = "d\nb\nc\nf\ne\ng\n";
-    // string ideal2 = "e\nb\nc\nf\ng\n";
-    // string ideal3 = "e\nb\nc\nf\n";
 
     string ideal1 = "d\nb\nc (RED)\nf\ne (RED)\ng (RED)\n";
     string ideal2 = "e\nb\nc (RED)\nf\ng (RED)\n";
     string ideal3 = "e\nb\nc (RED)\nf\n";
-    // string ideal2 = "c\nb\nf\ne (RED)\ng (RED)\n";
-    // string ideal3 = "c\nb\nf\ne (RED)\n";
     A.setValue("d", 1);
     A.setValue("b", 5);
     A.setValue("a", 10);
@@ -410,15 +405,9 @@ uint8_t runTest(Dictionary *pA, Dictionary *pB, int test) {
     return 0;
   }
   case PreString_equals: {
-    // std::string ideal1 = "b\na\nf\ne\nh\ni\n";
     std::string ideal1 = "b\na\nf (RED)\ne\nh\ni (RED)\n";
-    // std::string ideal2 =
-    //     "heat\neradicate\nbolstering\nabjuration\nfeather\ninsignia\n";
     std::string ideal2 = 
           "heat\neradicate (RED)\nbolstering\nabjuration (RED)\nfeather\ninsignia\n";
-    // std::string ideal3 = "heat\neradicate\nabjuration\nabbreviation\n"
-    //                      "bolstering\nfeather\ngodsend\njustify\n"
-    //                      "insignia\nquizzical\nleaflet\nsolemnly\n";
     std::string ideal3 = 
           "heat\neradicate (RED)\nabjuration\nabbreviation (RED)\nbolstering (RED)\n"
           "feather\ngodsend (RED)\njustify (RED)\ninsignia\nquizzical\nleaflet (RED)\nsolemnly (RED)\n";
@@ -470,12 +459,12 @@ uint8_t runTest(Dictionary *pA, Dictionary *pB, int test) {
   return 255;
 }
 
-void segfault_handler(int signal) { // everyone knows what this is
+void segfault_handler(int signal) {
   testStatus = 255;
   longjmp(test_crash, 1);
 }
 
-void exit_attempt_handler(void) { // only I decide when you are done
+void exit_attempt_handler(void) {
   if (disable_exit_handler)
     return; // allow this to be disabled
   testStatus = 255;
@@ -493,7 +482,6 @@ int main(int argc, char **argv) {
     exit(1);
   }
 
-  printf("\n"); // more spacing
   if (argc == 2)
     printf("\n"); // consistency in verbose mode
 
@@ -501,10 +489,6 @@ int main(int argc, char **argv) {
   disable_exit_handler = 0;
   atexit(exit_attempt_handler);
   signal(SIGSEGV, segfault_handler);
-  // signal(SIGTERM, abrupt_termination_handler); // dangerous
-  // signal(SIGINT, abrupt_termination_handler);
-  // signal(SIGFPE, abrupt_termination_handler);
-  // signal(SIGABRT, abrupt_termination_handler);
   for (uint8_t i = FIRST_TEST; i < NUM_TESTS; i++) {
     Dictionary A, B;
     uint8_t fail_type;
@@ -528,7 +512,7 @@ int main(int argc, char **argv) {
                             : (fail_type == 3 ? "exception being thrown"
                                               : "program interruption")))
              << NC << endl;
-        cout << "\nWARNING: Program will now stop running tests\n" << endl;
+        cout << RED "\nWARNING: Program will now stop running tests\n" NC << endl;
         break;
       } else if (testStatus != 0) {
         cout << ": test " CYAN << testStatus << NC << endl;
@@ -543,20 +527,8 @@ int main(int argc, char **argv) {
 
   disable_exit_handler = 1;
 
-  uint8_t totalScore = (testsPassed / 2) * 5 + (testsPassed % 2) * 3;
-
   if (argc == 2 && testStatus != 255)
     cout << "\nYou passed " << unsigned(testsPassed) << " out of " << NUM_TESTS
          << " tests" << endl;
-  else if (testStatus == 255) {
-    totalScore = CHARITY; // charity points
-    if (argc == 2)
-      cout << RED "Receiving charity points because your program crashes" NC
-           << endl;
-  }
-  cout << "You will receive " << unsigned(totalScore) << " out of " << MAXSCORE
-       << " possible points on the Dictionary Functionality Test\n"
-       << endl;
-  exit(0);
-  return 0;
+  exit(NUM_TESTS - testsPassed);
 }
