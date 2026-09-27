@@ -936,11 +936,11 @@ uint8_t runTest(List *pA, int test) {
   }
   return 255;
 }
-void segfault_handler(int signal) { // everyone knows what this is
+void segfault_handler(int signal) {
   testStatus = 255;
   longjmp(test_crash, 1);
 }
-void exit_attempt_handler(void) { // only I decide when you are done
+void exit_attempt_handler(void) {
   if (disable_exit_handler)
     return; // allow this to be disabled
   testStatus = 255;
