@@ -1,5 +1,5 @@
 #!/bin/bash
-RELATIVE_PATH="../cse-101-public-tests/pa4"
+RELATIVE_PATH="../cse-101-public-tests/sparse"
 NUMTESTS=5
 TIME=5
 pathtestspassed=0
