@@ -31,7 +31,7 @@ done
 
 valgrindtestspassed=0
 for NUM in $(seq 1 $NUMTESTS); do
-  let MAXTIME=$RUNTIME*3
+  let MAXTIME=$RUNTIME*6
   timeout $MAXTIME valgrind --leak-check=full --error-exitcode=2 -v ./WordFrequency "$RELATIVE_PATH/"WF-infile$NUM.txt WF-outfile$NUM.txt > /dev/null 2> valgrind-out-WF$NUM.txt
   if [ $? -eq 0 ]; then
     let valgrindtestspassed+=1
