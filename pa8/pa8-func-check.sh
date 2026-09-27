@@ -3,6 +3,7 @@ RELATIVE_PATH="../cse-101-public-tests/pa8"
 
 NUMTESTS=5
 RUNTIME=$((${1:-1}*15))
+wordstestspassed=0
 
 if g++ -std=c++17 -Wall -c -g Words.cpp Dictionary.cpp; then
   ((wordstestspassed++))
@@ -11,7 +12,6 @@ if g++ -std=c++17 -Wall -o Words Words.o Dictionary.o; then
   ((wordstestspassed++))
 fi
 
-wordstestspassed=0
 for NUM in $(seq 1 $NUMTESTS); do
   let MAXTIME=$RUNTIME*3
   timeout $MAXTIME /usr/bin/time -o time$NUM.txt -f "%U" ./Words "$RELATIVE_PATH/"infile$NUM.txt outfile$NUM.txt &> /dev/null
