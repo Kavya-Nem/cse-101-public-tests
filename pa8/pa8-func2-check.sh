@@ -3,6 +3,7 @@ RELATIVE_PATH="../cse-101-public-tests/pa8"
 
 NUMTESTS=3
 RUNTIME=$((${1:-1}*10))
+lextestspassed=0
 
 rm -f Dictionary.o
 if g++ -std=c++17 -Wall -c -g WordFrequency.cpp Dictionary.cpp; then
@@ -12,7 +13,6 @@ if g++ -std=c++17 -Wall -o WordFrequency WordFrequency.o Dictionary.o; then
   ((lextestspassed++));
 fi
 
-lextestspassed=0
 for NUM in $(seq 1 $NUMTESTS); do
   let MAXTIME=$RUNTIME*3
   timeout $MAXTIME /usr/bin/time -o WF-time$NUM.txt -f "%U" ./WordFrequency "$RELATIVE_PATH/"WF-infile$NUM.txt WF-outfile$NUM.txt &> /dev/null
