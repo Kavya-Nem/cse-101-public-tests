@@ -2,7 +2,7 @@
 rm -f *.o Sparse
 make
 exitcode=0
-if [ ! -x Sparse ] || (($(compgen -G "*.o" | wc -l) == 0)); then # exist and executable
+if [ ! -x Sparse ] || (($(compgen -G "*.o" | wc -l) == 0)); then # exist
   ((exitcode++))
 fi
 make clean
