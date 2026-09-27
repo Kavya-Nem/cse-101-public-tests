@@ -1,5 +1,5 @@
 #!/bin/bash
-RELATIVE_PATH="../cse-101-public-tests/pa4"
+RELATIVE_PATH="../cse-101-public-tests/sparse"
 EXE_ALL=( sparse-matrix.sh model-list-test.sh model-matrix-test.sh sparse-build.sh )
 EXE_RANGE=$((${#EXE_ALL[*]} - 1))
 OVERALL=0
