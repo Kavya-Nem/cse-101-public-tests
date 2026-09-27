@@ -1,5 +1,5 @@
 #!/bin/bash
-RELATIVE_PATH="../cse-101-public-tests/pa4"
+RELATIVE_PATH="../cse-101-public-tests/sparse"
 TIME=8
 rm -f Matrix.o List.o
 testspassed=0
