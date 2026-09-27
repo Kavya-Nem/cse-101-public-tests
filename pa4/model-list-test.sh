@@ -1,5 +1,5 @@
 #!/bin/bash
-RELATIVE_PATH="../cse-101-public-tests/pa4"
+RELATIVE_PATH="../cse-101-public-tests/sparse"
 rm -f List.o
 testspassed=0
 if gcc -c -std=c17 -Wall -g "$RELATIVE_PATH/"ModelListTest.c List.c; then
