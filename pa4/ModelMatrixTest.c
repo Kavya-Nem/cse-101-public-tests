@@ -5,8 +5,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "../../pa4/List.h"
-#include "../../pa4/Matrix.h"
+#include "../../sparse/List.h"
+#include "../../sparse/Matrix.h"
 #define FIRST_TEST Empty_getDimension
 #define RED "\033[0;31m"
 #define CYAN "\033[0;36m"
