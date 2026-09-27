@@ -1,6 +1,6 @@
 #!/bin/bash
 RELATIVE_PATH="../cse-101-public-tests/pa4"
-EXE_ALL=( pa4-func-check.sh pa4-lunit-check.sh pa4-munit-check.sh pa4-make-check.sh )
+EXE_ALL=( sparse-matrix-validation.sh sparse-list-validation.sh model-matrix-test.sh sparse-build-validation.sh )
 EXE_RANGE=$((${#EXE_ALL[*]} - 1))
 OVERALL=0
 for i in $(seq 0 $EXE_RANGE); do
