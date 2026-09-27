@@ -290,10 +290,9 @@ uint8_t runTest(Matrix *pA, Matrix *pB, Matrix *pC, Matrix *pD, int test) {
     int valcount = 1;
     for (int j = 1; j <= 100; j++) {
       for (int k = 1; k <= 100; k++) {
-        // hint: this is 1-10000 left-to-right row-by-row
         changeEntry(A, j, k, valcount++);
       }
-      changeEntry(B, j, j, 1); // hint: this is the identity matrix
+      changeEntry(B, j, j, 1);
     }
     freeMatrix(pC);
     freeMatrix(pD);
