@@ -4,7 +4,7 @@ rm -f *.o WordFrequency
 make
 exitcode=0
 
-if [ ! -x WordFrequency ] || (($(compgen -G "*.o" | wc -l) == 0)); then # exist and executable
+if [ ! -x WordFrequency ] || (($(compgen -G "*.o" | wc -l) == 0)); then # exist
   ((exitcode++))
 fi
 
