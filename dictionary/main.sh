@@ -1,6 +1,6 @@
 #!/bin/bash
-RELATIVE_PATH="../cse-101-public-tests/dictionary"
-EXE_ALL=( dictionary.sh model-dictionary-test.sh dictionary-build.sh )
+RELATIVE_PATH="../cse-101-public-tests/hashtable"
+EXE_ALL=( hashtable.sh model-hashtable-test.sh hashtable-build.sh )
 EXE_RANGE=$((${#EXE_ALL[*]} - 1))
 OVERALL=0
 for i in $(seq 0 $EXE_RANGE); do
