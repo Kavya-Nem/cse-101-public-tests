@@ -8,7 +8,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "expected.h"
-#include "../../dictionary/Dictionary.h"
+#include "../../hashtable/Dictionary.h"
 #define FIRST_TEST Empty_diagnostic
 #define RED "\033[0;31m"
 #define CYAN "\033[0;36m"
