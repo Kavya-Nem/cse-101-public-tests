@@ -1,5 +1,5 @@
 #!/bin/bash
-RELATIVE_PATH="../cse-101-public-tests/dictionary"
+RELATIVE_PATH="../cse-101-public-tests/hashtable"
 NUMTESTS=5
 RUNTIME=5
 lextestspassed=0
