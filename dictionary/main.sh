@@ -1,5 +1,5 @@
 #!/bin/bash
-RELATIVE_PATH="../cse-101-public-tests/pa5"
+RELATIVE_PATH="../cse-101-public-tests/dictionary"
 EXE_ALL=( dictionary.sh model-dictionary-test.sh dictionary-build.sh )
 EXE_RANGE=$((${#EXE_ALL[*]} - 1))
 OVERALL=0
