@@ -7,7 +7,7 @@
 #include <iomanip>
 #include <iostream>
 #include <string>
-#include "../../pa7/Dictionary.h"
+#include "../../binarysearchtree/Dictionary.h"
 #define FIRST_TEST Empty_size
 #define RED "\033[0;31m"
 #define CYAN "\033[0;36m"
