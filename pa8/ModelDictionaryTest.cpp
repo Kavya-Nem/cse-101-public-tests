@@ -8,7 +8,7 @@
 #include <iostream>
 #include <string>
 
-#include "../../pa8/Dictionary.h"
+#include "../../redblacktree/Dictionary.h"
 
 #define FIRST_TEST Empty_size
 
