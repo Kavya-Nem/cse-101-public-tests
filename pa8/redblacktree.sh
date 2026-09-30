@@ -1,5 +1,5 @@
 #!/bin/bash
-RELATIVE_PATH="../cse-101-public-tests/pa8"
+RELATIVE_PATH="../cse-101-public-tests/redblacktree"
 
 NUMTESTS=5
 RUNTIME=$((${1:-1}*15))
