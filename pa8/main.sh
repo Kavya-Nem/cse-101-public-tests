@@ -1,9 +1,6 @@
 #!/bin/bash
-# usage: ../cse-101-public-tests/pa8/pa8.sh
-# (run within your pa8 directory to test your code)
-
-RELATIVE_PATH="../cse-101-public-tests/pa8"
-EXE_ALL=( pa8-func-check.sh pa8-func2-check.sh pa8-unit-check.sh pa8-make-check.sh )
+RELATIVE_PATH="../cse-101-public-tests/redblacktree"
+EXE_ALL=( words.sh wordfrequency.sh model-redblacktree-test.sh redblacktree-build.sh )
 EXE_RANGE=$((${#EXE_ALL[*]} - 1))
 OVERALL=0
 for i in $(seq 0 $EXE_RANGE); do
