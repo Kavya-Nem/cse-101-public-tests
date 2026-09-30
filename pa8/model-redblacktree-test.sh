@@ -3,7 +3,6 @@ RELATIVE_PATH="../cse-101-public-tests/redblacktree"
 rm -f Dictionary.o
 MAXTIME=$((${1:-1}*6))
 testspassed=0
-
 if g++ -std=c++17 -Wall -c -g "$RELATIVE_PATH/"ModelDictionaryTest.cpp Dictionary.cpp; then
   ((testspassed++))
 fi
@@ -25,5 +24,4 @@ timeout $MAXTIME valgrind --error-exitcode=2 --leak-check=full -v ./ModelDiction
 if [ $? -eq 0 ]; then
   ((testspassed++))
 fi
-
 exit $((4-testspassed))
