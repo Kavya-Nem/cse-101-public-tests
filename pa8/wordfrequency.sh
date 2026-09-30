@@ -1,5 +1,5 @@
 #!/bin/bash
-RELATIVE_PATH="../cse-101-public-tests/pa8"
+RELATIVE_PATH="../cse-101-public-tests/redblacktree"
 
 NUMTESTS=3
 RUNTIME=$((${1:-1}*10))
@@ -17,7 +17,7 @@ for NUM in $(seq 1 $NUMTESTS); do
   let MAXTIME=$RUNTIME*3
   timeout $MAXTIME /usr/bin/time -o WF-time$NUM.txt -f "%U" ./WordFrequency "$RELATIVE_PATH/"WF-infile$NUM.txt WF-outfile$NUM.txt &> /dev/null
   t=$?
-  if [ -f time$NUM.txt ]; then
+  if [ -f WF-time$NUM.txt ]; then
     userTime=$(cat WF-time$NUM.txt)
   else
     userTime=$((RUNTIME+1))
