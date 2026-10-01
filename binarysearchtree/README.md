@@ -6,7 +6,6 @@ outputs.
 
 ## Usage
 
-After installation, you can run the script with this line:
-
 It will print out the difference between output and the correct output,
 using the `diff` command.
+
