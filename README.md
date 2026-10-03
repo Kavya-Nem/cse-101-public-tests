@@ -68,7 +68,7 @@ The `main.sh` scripts run the suite's individual checks and return a non-zero st
 Some individual scripts accept an optional numeric multiplier that adjusts runtime limits. For example:
 
 ```bash
-../cse-101-public-tests/binarysearchtree/main.sh 2
+../low-latency-data-structures-tests/binarysearchtree/main.sh 2
 ```
 
 Refer to the README in each suite for the specific commands and generated artifacts.
