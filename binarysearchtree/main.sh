@@ -1,5 +1,5 @@
 #!/bin/bash
-RELATIVE_PATH="../cse-101-public-tests/binarysearchtree"
+RELATIVE_PATH="../low-latency-data-structures-tests/binarysearchtree"
 EXE_ALL=( binarysearchtree.sh model-binarysearchtree-test.sh binarysearchtree-build.sh )
 EXE_RANGE=$((${#EXE_ALL[*]} - 1))
 OVERALL=0
