@@ -1,5 +1,5 @@
 #!/bin/bash
-RELATIVE_PATH="../cse-101-public-tests/sparse"
+RELATIVE_PATH="../low-latency-data-structures-tests/sparse"
 NUMTESTS=5
 TIME=5
 pathtestspassed=0
