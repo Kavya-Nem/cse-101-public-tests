@@ -1,5 +1,5 @@
 #!/bin/bash
-RELATIVE_PATH="../cse-101-public-tests/hashtable"
+RELATIVE_PATH="../low-latency-data-structures-tests/hashtable"
 rm -f Dictionary.o
 testspassed=0
 if gcc -std=c17 -Wall -c -g "$RELATIVE_PATH/"ModelDictionaryTest.c Dictionary.c; then
