@@ -1,5 +1,5 @@
 #!/bin/bash
-RELATIVE_PATH="../cse-101-public-tests/redblacktree"
+RELATIVE_PATH="../low-latency-data-structures-tests/redblacktree"
 rm -f Dictionary.o
 MAXTIME=$((${1:-1}*6))
 testspassed=0
