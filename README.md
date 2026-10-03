@@ -13,7 +13,7 @@ A collection of automated test and performance harnesses for data-structure proj
 
 ## How the harness works
 
-The repository contains **tests and reference data**, not the implementations being tested. The shell scripts expect to be run from the corresponding student/project directory containing the implementation files.
+The repository contains **tests and reference data**, not the implementations being tested. The shell scripts expect to be run from the corresponding project directory containing the implementation files.
 
 Each suite generally does some combination of:
 
@@ -25,7 +25,7 @@ Each suite generally does some combination of:
 - Checking for memory errors/leaks with `valgrind`.
 - Building and then cleaning the expected executable/object files.
 
-The scripts use relative paths such as `../cse-101-public-tests/binarysearchtree`. In the original test environment, this means the test repository is expected to be available at:
+The scripts use relative paths such as `../low-latency-data-structures-tests/binarysearchtree`. In the original test environment, this means the test repository is expected to be available at:
 
 ```text
 ../cse-101-public-tests/
