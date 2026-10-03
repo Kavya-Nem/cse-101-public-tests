@@ -1,5 +1,5 @@
 #!/bin/bash
-RELATIVE_PATH="../cse-101-public-tests/redblacktree"
+RELATIVE_PATH="../low-latency-data-structures-tests/redblacktree"
 EXE_ALL=( words.sh wordfrequency.sh model-redblacktree-test.sh redblacktree-build.sh )
 EXE_RANGE=$((${#EXE_ALL[*]} - 1))
 OVERALL=0
