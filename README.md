@@ -60,7 +60,7 @@ From a project directory that contains the implementation files and the relevant
 
 ```bash
 cd <your-project>
-../cse-101-public-tests/<suite>/main.sh
+../low-latency-data-structures-tests/<suite>/main.sh
 ```
 
 The `main.sh` scripts run the suite's individual checks and return a non-zero status if one or more checks fail.
