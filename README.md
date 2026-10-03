@@ -1,6 +1,6 @@
 # Low-Latency Data Structures Tests
 
-A collection of automated test and performance harnesses for CSE-style data-structure projects. The suites exercise implementations of dictionaries, word-processing programs, sparse matrices, and list/matrix ADTs.
+A collection of automated test and performance harnesses for data-structure projects. The suites exercise implementations of dictionaries, word-processing programs, sparse matrices, and list/matrix ADTs.
 
 ## Test suites
 
