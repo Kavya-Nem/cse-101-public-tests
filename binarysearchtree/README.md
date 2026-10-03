@@ -42,9 +42,9 @@ An optional multiplier can be supplied to adjust the runtime limits:
 Individual checks can also be run directly:
 
 ```bash
-../cse-101-public-tests/binarysearchtree/binarysearchtree.sh
-../cse-101-public-tests/binarysearchtree/model-binarysearchtree-test.sh
-../cse-101-public-tests/binarysearchtree/binarysearchtree-build.sh
+../low-latency-data-structures-tests/binarysearchtree/binarysearchtree.sh
+../low-latency-data-structures-tests/binarysearchtree/model-binarysearchtree-test.sh
+../low-latency-data-structures-tests/binarysearchtree/binarysearchtree-build.sh
 ```
 
 ## Expected project files
