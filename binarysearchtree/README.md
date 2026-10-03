@@ -30,7 +30,7 @@ The model dictionary client exercises operations such as insertion/removal, look
 From the project directory containing `Words.cpp` and `Dictionary.cpp`:
 
 ```bash
-../cse-101-public-tests/binarysearchtree/main.sh
+../low-latency-data-structures-tests/binarysearchtree/main.sh
 ```
 
 An optional multiplier can be supplied to adjust the runtime limits:
