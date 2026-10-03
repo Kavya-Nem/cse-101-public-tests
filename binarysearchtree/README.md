@@ -36,7 +36,7 @@ From the project directory containing `Words.cpp` and `Dictionary.cpp`:
 An optional multiplier can be supplied to adjust the runtime limits:
 
 ```bash
-../cse-101-public-tests/binarysearchtree/main.sh 2
+../low-latency-data-structures-tests/binarysearchtree/main.sh 2
 ```
 
 Individual checks can also be run directly:
