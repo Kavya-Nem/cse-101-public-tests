@@ -28,7 +28,7 @@ Each suite generally does some combination of:
 The scripts use relative paths such as `../low-latency-data-structures-tests/binarysearchtree`. In the original test environment, this means the test repository is expected to be available at:
 
 ```text
-../cse-101-public-tests/
+../low-latency-data-structures-tests/
 ├── binarysearchtree/
 ├── hashtable/
 ├── redblacktree/
