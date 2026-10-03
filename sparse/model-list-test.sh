@@ -1,5 +1,5 @@
 #!/bin/bash
-RELATIVE_PATH="../cse-101-public-tests/sparse"
+RELATIVE_PATH="../low-latency-data-structures-tests/sparse"
 rm -f List.o
 testspassed=0
 if gcc -c -std=c17 -Wall -g "$RELATIVE_PATH/"ModelListTest.c List.c; then
