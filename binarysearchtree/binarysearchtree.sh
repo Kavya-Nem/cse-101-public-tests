@@ -1,5 +1,5 @@
 #!/bin/bash
-RELATIVE_PATH="../cse-101-public-tests/binarysearchtree"
+RELATIVE_PATH="../low-latency-data-structures-tests/binarysearchtree"
 
 RUNTIME=$((${1:-1}*20))
 
